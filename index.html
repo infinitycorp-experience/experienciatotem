@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>InfinityCorp - Totem Experiência</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: contain;
+        }
+
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        .bg-premium {
+            background: radial-gradient(circle at 10% 20%, rgba(0, 150, 214, 0.15) 0%, transparent 45%),
+                        radial-gradient(circle at 90% 80%, rgba(240, 108, 32, 0.1) 0%, transparent 45%),
+                        #0b111e;
+        }
+
+        /* Brilho Neon Pulsante para o "É HOJE!!!" */
+        @keyframes neon-pulse {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px #f06c20, 0 0 35px #f06c20;
+                color: #ffffff;
+                transform: scale(1);
+            }
+            50% {
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px #0096d6, 0 0 50px #0096d6;
+                color: #0096d6;
+                transform: scale(1.03);
+            }
+        }
+        .animate-neon-today {
+            animation: neon-pulse 3s infinite ease-in-out;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-premium text-slate-100 h-[100dvh] flex flex-col justify-between p-4 md:p-6 select-none overflow-hidden">
+
+    <!-- ===================== CABEÇALHO (IDÊNTICO AO EVENTO) ===================== -->
+    <header class="text-center py-2 flex flex-col items-center gap-1 shrink-0">
+        <div class="flex flex-col items-center justify-center">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-none">
+                <span class="text-white">INFINITY</span><span class="text-[#0096d6]">CORP</span>
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm tracking-[0.6em] uppercase font-bold mt-1.5 pl-[0.6em]">
+                APRESENTA
+            </p>
+        </div>
+
+        <div class="w-full max-w-sm border-t border-slate-800 my-1"></div>
+
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wide">
+            1º - Café com Conexão
+        </h2>
+
+        <div class="inline-flex items-center gap-2 bg-[#f06c20]/10 border border-[#f06c20]/40 px-5 py-1 rounded-full backdrop-blur-sm mt-1">
+            <span class="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#f06c20] tracking-widest">
+                <i class="fa-regular fa-calendar-days"></i> 25/08/2026
+            </span>
+        </div>
+
+        <p class="font-black tracking-[0.15em] text-3xl sm:text-4xl uppercase animate-neon-today mt-1.5">
+            É hoje!!!
+        </p>
+    </header>
+
+    <!-- ===================== SELEÇÃO DE EXPERIÊNCIA ===================== -->
+    <main class="flex-grow flex items-center justify-center max-w-4xl mx-auto w-full py-2 overflow-hidden">
+        <div class="w-full space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-5">
+
+            <!-- CARD 1: MODO PREMIUM -->
+            <div onclick="location.href='index_premium.html'" class="cursor-pointer bg-slate-900/40 border border-[#0096d6]/40 hover:border-[#0096d6] rounded-2xl p-5 md:p-6 transition-all active:scale-[0.98] shadow-lg flex flex-col gap-3 group">
+                <div class="flex items-center gap-3">
+                    <div class="h-12 w-12 shrink-0 bg-[#0096d6]/10 border border-[#0096d6]/30 rounded-xl flex items-center justify-center text-[#0096d6] text-xl group-hover:bg-[#0096d6] group-hover:text-white transition-all">
+                        <i class="fa-solid fa-gem"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-extrabold text-white leading-snug">Modo Premium</h3>
+                        <p class="text-[11px] text-slate-400 leading-snug mt-0.5">Apresentação Executiva</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Interface sóbria e refinada, em grafite e dourado, para demonstrar a plataforma à diretoria.
+                </p>
+
+                <ul class="text-[11px] text-slate-300 space-y-1.5 flex-1">
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-[#0096d6] text-[10px]"></i> Carrinho com dropdown e animação</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-[#0096d6] text-[10px]"></i> Fotos reais dos produtos</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-[#0096d6] text-[10px]"></i> Veículo com fotos e cores</li>
+                </ul>
+
+                <div class="w-full bg-gradient-to-r from-[#0096d6] to-[#007cb3] py-3 rounded-xl text-sm font-bold text-white text-center transition-all shadow-lg shadow-sky-900/20 group-hover:brightness-110 mt-1">
+                    Entrar <i class="fa-solid fa-arrow-right ml-1"></i>
+                </div>
+            </div>
+
+            <!-- CARD 2: MODO GAMIFICADO -->
+            <div onclick="location.href='Gamificado.html'" class="cursor-pointer bg-slate-900/40 border border-[#f06c20]/40 hover:border-[#f06c20] rounded-2xl p-5 md:p-6 transition-all active:scale-[0.98] shadow-lg flex flex-col gap-3 group">
+                <div class="flex items-center gap-3">
+                    <div class="h-12 w-12 shrink-0 bg-[#f06c20]/10 border border-[#f06c20]/30 rounded-xl flex items-center justify-center text-[#f06c20] text-xl group-hover:bg-[#f06c20] group-hover:text-white transition-all">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-extrabold text-white leading-snug">Modo Gamificado</h3>
+                        <p class="text-[11px] text-slate-400 leading-snug mt-0.5">Totem Interativo</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Experiência leve e lúdica, com cores vivas e animações, ideal para pontos de autoatendimento.
+                </p>
+
+                <ul class="text-[11px] text-slate-300 space-y-1.5 flex-1">
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-[#f06c20] text-[10px]"></i> Visual claro + modo escuro</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-[#f06c20] text-[10px]"></i> Animações, confete e ripple</li>
+                    <li class="flex items-center gap-2"><i class="fa-solid fa-check text-[#f06c20] text-[10px]"></i> Carro em SVG com gradientes</li>
+                </ul>
+
+                <div class="w-full bg-gradient-to-r from-[#f06c20] to-[#d6550f] py-3 rounded-xl text-sm font-bold text-white text-center transition-all shadow-lg shadow-orange-900/20 group-hover:brightness-110 mt-1">
+                    Entrar <i class="fa-solid fa-arrow-right ml-1"></i>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===================== RODAPÉ ===================== -->
+    <footer class="text-center py-2 text-[10px] text-slate-600 tracking-wider shrink-0 border-t border-slate-800/20">
+        INFINITYCORP &copy; 2026 • SELECIONE A EXPERIÊNCIA • USE O BOTÃO <span class="text-slate-400">↩</span> PARA VOLTAR AQUI
+    </footer>
+
+</body>
+</html>

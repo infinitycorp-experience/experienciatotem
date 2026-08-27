@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=2560, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plataforma de Autoatendimento — Apresentação Executiva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta executiva — grafite + dourado champagne */
+            --gold: #C9A24B;
+            --gold-light: #E3C87F;
+            --gold-dark: #A8843A;
+            --green: #3F8F6B;
+            --green-light: #5AB08A;
+            --red: #C0564C;
+
+            --bg: #0B0D10;
+            --bg-soft: #12151A;
+            --surface: rgba(255, 255, 255, 0.03);
+            --surface-elev: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.15);
+
+            --text: #E9E7E2;
+            --text-secondary: #A6A29A;
+            --text-muted: #6E6B64;
+
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow: 0 6px 18px rgba(0,0,0,0.35);
+            --shadow-lg: 0 16px 40px rgba(0,0,0,0.45);
+            --shadow-xl: 0 28px 70px rgba(0,0,0,0.6);
+
+            --radius-sm: 10px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+
+            --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-fast: 0.18s ease;
+
+            --font: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-ui: 'Sora', 'Inter', sans-serif;
+            --font-display: 'Playfair Display', Georgia, serif;
+        }
+
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        html{font-size:16px;scroll-behavior:smooth}
+        body{
+            font-family:var(--font);
+            background:var(--bg);
+            color:var(--text);
+            min-height:100vh;
+            overflow-x:hidden;
+            background-image:
+                radial-gradient(ellipse 70% 50% at 50% -10%, rgba(201,162,75,0.06), transparent 60%),
+                radial-gradient(ellipse 60% 50% at 50% 110%, rgba(201,162,75,0.04), transparent 60%);
+            background-attachment:fixed;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+        }
+        button{cursor:pointer;font-family:var(--font);border:none;outline:none}
+        input,select,textarea{font-family:var(--font)}
+        ::selection{background:rgba(201,162,75,0.3)}
+
+        /* ============ ATTRACTOR ============ */
+        .attractor-overlay{
+            position:fixed;inset:0;z-index:9999;
+            background:
+                radial-gradient(ellipse at 50% 40%, rgba(201,162,75,0.07), transparent 60%),
+                linear-gradient(160deg,#0B0D10 0%,#12151A 50%,#0B0D10 100%);
+            display:flex;align-items:center;justify-content:center;
+            flex-direction:column;gap:1.75rem;
+            cursor:pointer;
+            opacity:0;pointer-events:none;
+            transition:opacity 1s ease;
+        }
+        .attractor-overlay.active{opacity:1;pointer-events:all}
+        .attractor-logo-img{width:260px;height:auto;filter:drop-shadow(0 12px 40px rgba(0,0,0,0.5));}
+        .attractor-title{font-family:var(--font-display);font-size:3.75rem;font-weight:600;color:var(--text);letter-spacing:0.01em;text-align:center;}
+        .attractor-title em{font-style:normal;color:var(--gold-light)}
+        .attractor-subtitle{font-family:var(--font-ui);font-size:1.15rem;color:var(--text-secondary);letter-spacing:0.28em;text-transform:uppercase;}
+        .attractor-tap{font-size:0.9rem;color:var(--text-muted);letter-spacing:0.2em;text-transform:uppercase;margin-top:1.5rem;padding:0.9rem 2rem;border:1px solid var(--border-strong);border-radius:99px;}
+        .attractor-divider{width:1px;height:64px;background:linear-gradient(180deg,transparent,var(--gold),transparent);}
+
+        /* ============ APP / SCREENS ============ */
+        .app-container{max-width:2560px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+        .screen{display:none;flex-direction:column;padding:2rem 3.5rem;flex:1}
+        .screen.active{display:flex;animation:screenEnter 0.45s cubic-bezier(0.25,0.8,0.25,1)}
+        .screen.active.exiting{animation:screenExit 0.28s cubic-bezier(0.25,0.8,0.25,1) forwards}
+        @keyframes screenEnter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes screenExit{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-14px)}}
+
+        /* ============ HEADER ============ */
+        .app-header{display:flex;align-items:center;justify-content:space-between;padding:1.15rem 3.5rem;background:rgba(11,13,16,0.7);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+        .header-logo{display:flex;align-items:center;gap:0.85rem;}
+        .header-logo .mark{width:10px;height:10px;background:var(--gold);border-radius:2px;transform:rotate(45deg);}
+        .header-logo .name{font-family:var(--font-ui);font-size:1.05rem;font-weight:600;letter-spacing:0.06em;color:var(--text);}
+        .header-logo .name span{color:var(--gold-light)}
+        .header-actions{display:flex;gap:0.6rem;align-items:center}
+        .btn-icon{width:44px;height:44px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;background:transparent;color:var(--text-secondary);transition:all var(--transition-fast);border:1px solid var(--border);font-size:1.05rem;}
+        .btn-icon:hover{background:var(--surface-elev);color:var(--gold-light);border-color:var(--border-strong);}
+        .btn-icon:active{transform:scale(0.95)}
+        .btn-icon .fs-icon{font-size:1rem;line-height:1}
+
+        /* ============ CART: ÍCONE + BADGE + FLY + DROPDOWN ============ */
+        .cart-icon-btn{
+            position:relative;
+            width:44px;height:44px;
+            border-radius:var(--radius-sm);
+            display:flex;align-items:center;justify-content:center;
+            background:transparent;color:var(--text-secondary);
+            border:1px solid var(--border);
+            cursor:pointer;
+            transition:all var(--transition-fast);
+        }
+        .cart-icon-btn:hover{color:var(--gold-light);border-color:var(--border-strong);background:var(--surface-elev);}
+        .cart-icon-btn svg{width:20px;height:20px;}
+        .cart-badge{
+            position:absolute;top:-6px;right:-6px;
+            min-width:20px;height:20px;padding:0 6px;
+            border-radius:99px;
+            background:var(--gold);color:#1A1408;
+            font-size:0.72rem;font-weight:700;
+            display:flex;align-items:center;justify-content:center;
+            font-family:var(--font-ui);
+            box-shadow:0 2px 6px rgba(201,162,75,0.4);
+            transform:scale(0);
+            transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .cart-badge.visible{transform:scale(1)}
+        .cart-badge.pulse{animation:badgePulse 0.5s cubic-bezier(0.34,1.56,0.64,1);}
+        @keyframes badgePulse{
+            0%{transform:scale(1)}
+            50%{transform:scale(1.35)}
+            100%{transform:scale(1)}
+        }
+
+        .fly-item{
+            position:fixed;
+            z-index:9000;
+            pointer-events:none;
+            width:60px;height:60px;
+            border-radius:var(--radius);
+            background:linear-gradient(135deg,#1A1E26,#242933);
+            border:1px solid var(--border-strong);
+            display:flex;align-items:center;justify-content:center;
+            overflow:hidden;
+            box-shadow:0 10px 30px rgba(0,0,0,0.5);
+            transition:
+                left 0.75s cubic-bezier(0.5,-0.2,0.7,0.9),
+                top 0.75s cubic-bezier(0.5,-0.2,0.7,0.9),
+                opacity 0.75s ease,
+                width 0.75s ease,
+                height 0.75s ease;
+        }
+        .fly-item img{width:100%;height:100%;object-fit:cover;}
+        .fly-item .fly-mono{
+            font-family:var(--font-display);
+            font-size:1.4rem;
+            color:var(--gold-light);
+        }
+        .fly-item.flying{
+            width:14px;height:14px;
+            opacity:0.2;
+        }
+
+        .cart-dropdown{
+            position:fixed;
+            top:80px;
+            right:3.5rem;
+            width:380px;
+            max-height:calc(100vh - 120px);
+            background:var(--bg-soft);
+            border:1px solid var(--border-strong);
+            border-radius:var(--radius-lg);
+            box-shadow:var(--shadow-xl);
+            z-index:150;
+            display:flex;flex-direction:column;
+            opacity:0;
+            transform:translateY(-10px) scale(0.97);
+            pointer-events:none;
+            transition:opacity 0.22s ease, transform 0.22s cubic-bezier(0.25,0.8,0.25,1);
+            overflow:hidden;
+        }
+        .cart-dropdown.open{
+            opacity:1;
+            transform:translateY(0) scale(1);
+            pointer-events:all;
+        }
+        .cart-dropdown::before{
+            content:'';
+            position:absolute;
+            top:-6px;right:24px;
+            width:12px;height:12px;
+            background:var(--bg-soft);
+            border-left:1px solid var(--border-strong);
+            border-top:1px solid var(--border-strong);
+            transform:rotate(45deg);
+        }
+        .cart-dropdown-head{
+            display:flex;align-items:center;justify-content:space-between;
+            padding:1.1rem 1.4rem;
+            border-bottom:1px solid var(--border);
+        }
+        .cart-dropdown-title{
+            font-family:var(--font-ui);
+            font-size:0.95rem;font-weight:600;
+            color:var(--text);
+            letter-spacing:0.02em;
+        }
+        .cart-dropdown-count{
+            font-size:0.8rem;
+            color:var(--text-muted);
+            letter-spacing:0.04em;
+        }
+        .cart-dropdown-body{
+            flex:1;
+            overflow-y:auto;
+            padding:0.6rem 0;
+            max-height:340px;
+        }
+        .cart-dropdown-empty{
+            padding:2.5rem 1.4rem;
+            text-align:center;
+            color:var(--text-muted);
+            font-size:0.95rem;
+            font-style:italic;
+        }
+        .cart-dropdown-item{
+            display:flex;align-items:center;gap:0.9rem;
+            padding:0.85rem 1.4rem;
+            transition:background var(--transition-fast);
+        }
+        .cart-dropdown-item:hover{background:var(--surface-elev);}
+        .cart-dropdown-item-img{
+            width:44px;height:44px;
+            border-radius:var(--radius-sm);
+            background:var(--surface);
+            display:flex;align-items:center;justify-content:center;
+            overflow:hidden;flex-shrink:0;
+            border:1px solid var(--border);
+        }
+        .cart-dropdown-item-img img{width:100%;height:100%;object-fit:cover;}
+        .cart-dropdown-item-img .dd-mono{
+            font-family:var(--font-display);
+            font-size:1.1rem;
+            color:var(--gold-light);
+        }
+        .cart-dropdown-item-info{flex:1;min-width:0;}
+        .cart-dropdown-item-info h5{
+            font-family:var(--font-ui);
+            font-size:0.9rem;font-weight:500;
+            color:var(--text);
+            margin-bottom:0.15rem;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+        }
+        .cart-dropdown-item-info span{
+            font-size:0.78rem;
+            color:var(--text-muted);
+        }
+        .cart-dropdown-item-price{
+            font-family:var(--font-display);
+            font-size:0.95rem;font-weight:600;
+            color:var(--gold-light);
+            flex-shrink:0;
+        }
+        .cart-dropdown-foot{
+            padding:1rem 1.4rem 1.2rem;
+            border-top:1px solid var(--border);
+            background:rgba(0,0,0,0.15);
+        }
+        .cart-dropdown-total{
+            display:flex;justify-content:space-between;align-items:center;
+            margin-bottom:0.9rem;
+            font-family:var(--font-ui);
+            font-size:0.9rem;
+            color:var(--text-secondary);
+        }
+        .cart-dropdown-total span:last-child{
+            font-family:var(--font-display);
+            font-size:1.2rem;font-weight:600;
+            color:var(--gold-light);
+        }
+        .cart-dropdown-btn{
+            width:100%;
+            padding:0.8rem 1.2rem;
+            border-radius:var(--radius-sm);
+            background:linear-gradient(135deg,var(--gold-light),var(--gold-dark));
+            color:#1A1408;
+            font-weight:600;font-size:0.9rem;
+            letter-spacing:0.02em;
+            transition:filter var(--transition-fast);
+        }
+        .cart-dropdown-btn:hover{filter:brightness(1.05);}
+        .cart-dropdown-btn:active{transform:scale(0.98);}
+
+        /* ============ HOME ============ */
+        .home-content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2rem;gap:3.5rem;}
+        .home-heading{text-align:center;max-width:900px;}
+        .home-eyebrow{font-family:var(--font-ui);font-size:0.85rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem;}
+        .home-heading h1{font-family:var(--font-display);font-size:3.4rem;font-weight:500;line-height:1.15;letter-spacing:0.01em;color:var(--text);}
+        .home-heading h1 em{font-style:normal;color:var(--gold-light);}
+        .home-heading p{color:var(--text-secondary);font-size:1.1rem;line-height:1.7;margin-top:1.25rem;}
+        .home-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;max-width:1680px;width:100%;}
+        .home-card{background:var(--surface);border-radius:var(--radius-lg);padding:3.25rem 2.5rem;text-align:center;cursor:pointer;transition:all var(--transition);border:1px solid var(--border);position:relative;overflow:hidden;}
+        .home-card:hover{transform:translateY(-6px);border-color:rgba(201,162,75,0.4);background:var(--surface-elev);box-shadow:var(--shadow-lg);}
+        .home-card:active{transform:translateY(-2px)}
+        .home-icon{display:flex;align-items:center;justify-content:center;margin-bottom:1.75rem;color:var(--gold);}
+        .home-icon svg{width:56px;height:56px;}
+        .home-card .idx{font-family:var(--font-ui);font-size:0.78rem;letter-spacing:0.3em;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.75rem;}
+        .home-card h2{font-family:var(--font-display);font-size:1.75rem;font-weight:500;margin-bottom:0.65rem;color:var(--text);}
+        .home-card p{color:var(--text-secondary);font-size:0.98rem;line-height:1.6}
+        .home-card .card-accent{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity var(--transition);}
+        .home-card:hover .card-accent{opacity:1}
+
+        /* ============ FLOW ============ */
+        .flow-container{flex:1;display:flex;flex-direction:column;max-width:1800px;margin:0 auto;width:100%}
+        .flow-header{display:flex;align-items:center;gap:1.5rem;padding:1.75rem 0;flex-wrap:wrap}
+        .btn-back{display:flex;align-items:center;gap:0.5rem;padding:0.8rem 1.4rem;border-radius:var(--radius-sm);font-size:0.95rem;font-weight:500;background:transparent;color:var(--text-secondary);border:1px solid var(--border);transition:all var(--transition-fast);letter-spacing:0.02em;}
+        .btn-back:hover{color:var(--gold-light);border-color:var(--border-strong);}
+        .btn-back:active{transform:scale(0.97)}
+        .breadcrumbs{display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--text-secondary);flex-wrap:wrap;font-family:var(--font-ui);}
+        .breadcrumbs span.active{color:var(--gold-light);font-weight:600}
+        .breadcrumbs .sep{color:var(--text-muted)}
+        .progress-bar-container{flex:1;min-width:200px;height:2px;background:var(--surface);border-radius:99px;overflow:hidden;}
+        .progress-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));transition:width 0.5s cubic-bezier(0.25,0.8,0.25,1);}
+        .flow-body{flex:1;overflow-y:auto;padding:0.5rem 0;min-height:0}
+        .flow-footer{display:flex;justify-content:space-between;align-items:center;padding:1.75rem 0;gap:1rem}
+
+        .btn-primary{padding:0.95rem 2.6rem;border-radius:var(--radius-sm);background:linear-gradient(135deg,var(--gold-light),var(--gold-dark));color:#1A1408;font-weight:600;font-size:1rem;box-shadow:0 6px 18px rgba(201,162,75,0.22);transition:all var(--transition-fast);letter-spacing:0.02em;}
+        .btn-primary:hover{filter:brightness(1.05);transform:translateY(-1px);box-shadow:0 10px 24px rgba(201,162,75,0.3);}
+        .btn-primary:active{transform:scale(0.98)}
+        .btn-primary:disabled{opacity:0.35;cursor:not-allowed;transform:none;filter:none;box-shadow:none}
+        .btn-secondary{padding:0.9rem 2rem;border-radius:var(--radius-sm);background:transparent;color:var(--text-secondary);font-weight:500;font-size:1rem;border:1px solid var(--border);transition:all var(--transition-fast);letter-spacing:0.02em;}
+        .btn-secondary:hover{color:var(--text);border-color:var(--border-strong);}
+        .btn-secondary:active{transform:scale(0.97)}
+
+        /* ============ SECTION ============ */
+        .section-head{margin-bottom:2rem;}
+        .eyebrow{font-family:var(--font-ui);font-size:0.78rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:0.75rem;}
+        .section-title{font-family:var(--font-display);font-size:2.4rem;font-weight:500;letter-spacing:0.01em;color:var(--text);display:flex;align-items:center;gap:1.25rem;}
+        .section-title::before{content:'';width:38px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);}
+        .section-note{color:var(--text-secondary);font-size:1rem;margin-top:0.6rem;}
+
+        /* ============ CARDS ============ */
+        .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+        .card{background:var(--surface);border-radius:var(--radius-lg);padding:2.25rem 1.75rem;border:1px solid var(--border);transition:all var(--transition);cursor:pointer;text-align:center;position:relative;overflow:hidden;}
+        .card:hover{transform:translateY(-4px);border-color:var(--border-strong);background:var(--surface-elev);}
+        .card:active{transform:scale(0.98)}
+        .card.selected{border:1px solid var(--gold);background:rgba(201,162,75,0.05);box-shadow:0 0 0 3px rgba(201,162,75,0.12);}
+        .card h3{font-family:var(--font-ui);font-size:1.15rem;font-weight:600;margin-bottom:0.45rem;letter-spacing:0.01em}
+        .card p{font-size:0.9rem;color:var(--text-secondary);line-height:1.5}
+        .card-price{font-family:var(--font-display);font-size:1.3rem;font-weight:600;color:var(--gold-light);margin-top:1rem;}
+
+        .mono{width:68px;height:68px;border-radius:50%;border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.45rem;font-weight:500;color:var(--gold-light);background:rgba(201,162,75,0.05);margin:0 auto 1.1rem;}
+        .mono-sm{width:44px;height:44px;border-radius:50%;border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1rem;font-weight:500;color:var(--gold-light);background:rgba(201,162,75,0.05);flex-shrink:0;}
+
+        /* ============ PRODUCT CARD ============ */
+        .product-card{background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);transition:all var(--transition);display:flex;flex-direction:column;position:relative;}
+        .product-card:hover{transform:translateY(-4px);border-color:var(--border-strong);background:var(--surface-elev);}
+        .product-card.selected{border:1px solid var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,0.12);}
+        .product-img{height:200px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0E1116 0%,#171B22 100%);position:relative;overflow:hidden;}
+        .product-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s ease;}
+        .product-card:hover .product-img img{transform:scale(1.05)}
+        .product-img .img-badge{position:absolute;top:14px;right:14px;background:rgba(201,162,75,0.9);color:#1A1408;font-size:0.72rem;font-weight:700;padding:5px 12px;border-radius:6px;z-index:2;letter-spacing:0.04em;}
+        .product-img .img-fallback{display:none;position:absolute;inset:0;align-items:center;justify-content:center;}
+        .product-img.has-fallback .img-fallback{display:flex;}
+        .product-info{padding:1.5rem;flex:1;display:flex;flex-direction:column}
+        .product-info h3{font-family:var(--font-ui);font-size:1.15rem;font-weight:600;margin-bottom:0.4rem;letter-spacing:0.01em}
+        .product-info .desc{font-size:0.9rem;color:var(--text-secondary);flex:1;line-height:1.5}
+        .product-info .price-row{display:flex;align-items:center;justify-content:space-between;margin-top:1.25rem;gap:1rem}
+        .product-info .price{font-family:var(--font-display);font-size:1.45rem;font-weight:600;color:var(--gold-light);}
+        .btn-add{padding:0.7rem 1.4rem;border-radius:var(--radius-sm);background:transparent;color:var(--gold-light);font-weight:600;font-size:0.9rem;transition:all var(--transition-fast);border:1px solid var(--gold-dark);letter-spacing:0.02em;}
+        .btn-add:hover{background:rgba(201,162,75,0.12);}
+        .btn-add:active{transform:scale(0.95)}
+        .btn-add.added{background:rgba(63,143,107,0.15);border-color:var(--green);color:var(--green-light);}
+
+        /* ============ CUSTOM OPTIONS ============ */
+        .custom-options{display:flex;flex-direction:column;gap:0.7rem;max-width:820px}
+        .custom-option{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);cursor:pointer;transition:all var(--transition-fast);}
+        .custom-option:hover{border-color:var(--border-strong);}
+        .custom-option.selected{border-color:var(--gold);background:rgba(201,162,75,0.05);}
+        .custom-option .opt-info h4{font-weight:500;font-size:1rem;font-family:var(--font-ui);}
+        .custom-option .opt-price{font-weight:500;color:var(--gold-light);font-family:var(--font-ui);font-size:0.95rem;}
+        .toggle-switch{width:52px;height:28px;border-radius:99px;background:var(--surface-elev);position:relative;cursor:pointer;transition:background var(--transition-fast);border:1px solid var(--border-strong);flex-shrink:0;}
+        .toggle-switch.active{background:var(--gold-dark);border-color:var(--gold-dark)}
+        .toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform var(--transition-fast);}
+        .toggle-switch.active::after{transform:translateX(24px)}
+
+        /* ============ CART ============ */
+        .cart-list{display:flex;flex-direction:column;gap:0.9rem}
+        .cart-item{display:flex;align-items:center;gap:1.4rem;padding:1.2rem;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);}
+        .cart-item-img{width:64px;height:64px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;background:var(--bg-soft);overflow:hidden;flex-shrink:0;}
+        .cart-item-img img{width:100%;height:100%;object-fit:cover}
+        .cart-item-info{flex:1}
+        .cart-item-info h4{font-weight:500;margin-bottom:0.2rem;font-family:var(--font-ui);font-size:1.05rem;}
+        .cart-item-info .customs{font-size:0.85rem;color:var(--text-secondary)}
+        .cart-item-qty{display:flex;align-items:center;gap:0.6rem}
+        .qty-btn{width:34px;height:34px;border-radius:50%;background:transparent;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:1.1rem;transition:all var(--transition-fast);border:1px solid var(--border-strong);color:var(--text-secondary);}
+        .qty-btn:hover{color:var(--gold-light);border-color:var(--gold);}
+        .qty-btn:active{transform:scale(0.9)}
+        .cart-item-price{font-family:var(--font-display);font-weight:600;font-size:1.15rem;color:var(--gold-light);min-width:110px;text-align:right}
+        .cart-item-remove{color:var(--red);font-size:0.85rem;font-weight:500;cursor:pointer;padding:0.5rem 1rem;border-radius:var(--radius-sm);transition:all var(--transition-fast);background:rgba(192,86,76,0.08);border:1px solid rgba(192,86,76,0.25);}
+        .cart-item-remove:hover{background:rgba(192,86,76,0.18)}
+        .cart-summary{margin-top:1.5rem;padding:1.75rem;background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);}
+        .cart-summary .row{display:flex;justify-content:space-between;padding:0.5rem 0;font-size:1rem}
+        .cart-summary .row.total{font-size:1.45rem;font-weight:600;font-family:var(--font-display);border-top:1px solid var(--border);margin-top:0.75rem;padding-top:1.25rem;}
+        .discount-input{display:flex;gap:0.6rem;margin:0.85rem 0}
+        .discount-input input{flex:1;padding:0.8rem 1.2rem;border-radius:var(--radius-sm);border:1px solid var(--border);font-size:0.95rem;background:var(--bg-soft);color:var(--text);transition:border-color var(--transition-fast);}
+        .discount-input input:focus{border-color:var(--gold);outline:none;}
+        .discount-input button{padding:0.8rem 1.5rem;border-radius:var(--radius-sm);background:transparent;color:var(--gold-light);font-weight:600;font-size:0.95rem;border:1px solid var(--gold-dark);}
+
+        /* ============ PAYMENT ============ */
+        .payment-methods{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.2rem}
+        .payment-method{padding:2rem 1.5rem;text-align:center;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:all var(--transition);}
+        .payment-method:hover{border-color:var(--border-strong);transform:translateY(-3px);}
+        .payment-method.selected{border-color:var(--gold);background:rgba(201,162,75,0.05);box-shadow:0 0 0 3px rgba(201,162,75,0.12);}
+        .pay-icon{width:52px;height:52px;margin:0 auto 0.9rem;color:var(--gold);display:flex;align-items:center;justify-content:center;}
+.pay-icon svg{width:100%;height:100%;}
+.pay-icon img{width:100%;height:100%;object-fit:contain;}
+
+        .payment-method span{display:block;font-size:1rem;font-weight:500;color:var(--text);font-family:var(--font-ui);}
+        .card-simulation{padding:3rem;text-align:center;background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);}
+
+        /* ============ VEHICLE ============ */
+        .vehicle-preview{background:var(--surface);border-radius:var(--radius-lg);padding:2.75rem;text-align:center;margin-bottom:1.75rem;border:1px solid var(--border);position:relative;overflow:hidden;}
+        .vehicle-photo-wrap{
+            position:relative;
+            display:inline-block;
+            max-width:620px;
+            width:100%;
+            border-radius:var(--radius);
+            overflow:hidden;
+            background:linear-gradient(180deg,#EDEEF0 0%,#C9CDD4 100%);
+        }
+        .vehicle-photo{width:100%;display:block;position:relative;z-index:1}
+        .vehicle-tint,.vehicle-color,.vehicle-shading{
+            position:absolute;inset:0;pointer-events:none;
+        }
+        .vehicle-tint{z-index:2;mix-blend-mode:multiply;opacity:0.65;transition:background 0.4s ease;}
+        .vehicle-color{z-index:3;mix-blend-mode:color;opacity:0.55;transition:background 0.4s ease;}
+        .vehicle-shading{z-index:4;background:linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 35%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.28) 100%);mix-blend-mode:overlay;}
+        .vehicle-color-name{font-family:var(--font-ui);font-size:1rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-secondary);margin-top:1.4rem;}
+        .color-swatches{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+        .color-swatch{width:56px;height:56px;border-radius:50%;cursor:pointer;border:2px solid var(--border-strong);transition:all var(--transition-fast);position:relative;}
+        .color-swatch:hover{transform:scale(1.12)}
+        .color-swatch.selected{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,162,75,0.25);transform:scale(1.12);}
+        .color-swatch .check{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:1.1rem;opacity:0;transition:opacity var(--transition-fast);}
+        .color-swatch.selected .check{opacity:1}
+
+        /* ============ TICKET / QR ============ */
+        .ticket{background:var(--surface);border-radius:var(--radius-lg);padding:2.75rem;text-align:center;border:1px solid var(--border-strong);max-width:460px;margin:0 auto;position:relative;overflow:hidden;}
+        .ticket::before,.ticket::after{content:'';position:absolute;width:26px;height:26px;background:var(--bg);border-radius:50%;top:50%;}
+        .ticket::before{left:-13px;transform:translateY(-50%)}
+        .ticket::after{right:-13px;transform:translateY(-50%)}
+        .ticket-number{font-family:var(--font-display);font-size:3.6rem;font-weight:600;letter-spacing:0.06em;color:var(--gold-light);}
+        .qr-code{width:150px;height:150px;margin:1.4rem auto;background:#fff;border-radius:var(--radius);display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:4px;padding:14px;}
+        .qr-dot{background:#111;border-radius:2px}
+        .qr-dot.empty{background:transparent}
+
+        /* ============ STAR RATING ============ */
+        .star-rating{display:flex;gap:0.5rem;justify-content:center;font-size:2.75rem}
+        .star-rating .star{cursor:pointer;transition:all var(--transition-fast);color:var(--text-muted)}
+        .star-rating .star.active{color:var(--gold);transform:scale(1.1)}
+        .star-rating .star:hover{transform:scale(1.15)}
+
+        /* ============ FORM ============ */
+        .form-field{margin-bottom:1.25rem}
+        .form-field label{display:block;font-weight:500;margin-bottom:0.5rem;font-size:0.9rem;color:var(--text-secondary);letter-spacing:0.02em;}
+        .form-field input,.form-field textarea,.form-field select{width:100%;padding:1rem 1.2rem;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-soft);color:var(--text);font-size:1rem;transition:border-color var(--transition-fast);}
+        .form-field input:focus,.form-field textarea:focus,.form-field select:focus{border-color:var(--gold);outline:none;}
+
+        /* ============ TOAST ============ */
+        .toast-container{position:fixed;top:24px;right:24px;z-index:300;display:flex;flex-direction:column;gap:0.7rem;}
+        .toast{padding:1rem 1.4rem;border-radius:var(--radius-sm);background:var(--bg-soft);display:flex;align-items:center;gap:0.75rem;font-weight:500;font-size:0.95rem;animation:toastIn 0.35s ease,toastOut 0.35s ease 2.6s forwards;border:1px solid var(--border-strong);max-width:400px;}
+        .toast::before{content:'';width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+        .toast.success::before{background:var(--green)}
+        .toast.error::before{background:var(--red)}
+        @keyframes toastIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+        @keyframes toastOut{from{transform:translateX(0);opacity:1}to{transform:translateX(120%);opacity:0}}
+
+        /* ============ SCROLLBAR ============ */
+        ::-webkit-scrollbar{width:10px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--surface-elev);border-radius:99px;border:2px solid var(--bg)}
+        ::-webkit-scrollbar-thumb:hover{background:var(--border-strong)}
+
+        @media(max-width:1400px){
+            .screen{padding:1.5rem}
+            .home-grid{grid-template-columns:1fr}
+            .cards-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+            .flow-footer{flex-direction:column}
+            .btn-primary,.btn-secondary{width:100%;text-align:center}
+            .payment-methods{grid-template-columns:repeat(2,1fr)}
+            .cart-dropdown{right:1.5rem}
+        }
+    </style>
+</head>
+<body>
+
+    <div class="attractor-overlay" id="attractorOverlay">
+        <img src="logo.png" alt="Logo" class="attractor-logo-img" onerror="this.style.display='none'">
+        <div class="attractor-title">Plataforma de <em>Autoatendimento</em></div>
+        <div class="attractor-subtitle">Apresentação Executiva</div>
+        <div class="attractor-divider"></div>
+        <div class="attractor-tap">Toque para iniciar</div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="app-container" id="appContainer">
+        <header class="app-header">
+            <div class="header-logo">
+                <span class="mark"></span>
+                <span class="name">APRESENTAÇÃO <span>· DIRETORIA</span></span>
+            </div>
+            <div class="header-actions">
+    <button class="btn-icon" id="btnVoltar" title="Voltar à seleção" onclick="location.href='index.html'">↩</button>
+    <button class="btn-icon" id="btnFullscreen" title="Tela cheia"><span class="fs-icon">⛶</span></button>
+    <button class="btn-icon" id="btnHome" title="Início">⌂</button>
+    <button class="cart-icon-btn" id="btnCart" title="Ver carrinho">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+</div>
+
+        </header>
+
+        <div class="cart-dropdown" id="cartDropdown">
+            <div class="cart-dropdown-head">
+                <span class="cart-dropdown-title">Seu carrinho</span>
+                <span class="cart-dropdown-count" id="cartDropdownCount">0 itens</span>
+            </div>
+            <div class="cart-dropdown-body" id="cartDropdownBody">
+                <div class="cart-dropdown-empty">Carrinho vazio</div>
+            </div>
+            <div class="cart-dropdown-foot" id="cartDropdownFoot" style="display:none">
+                <div class="cart-dropdown-total">
+                    <span>Total</span>
+                    <span id="cartDropdownTotal">R$ 0,00</span>
+                </div>
+                <button class="cart-dropdown-btn" id="cartDropdownGo">Ver carrinho completo</button>
+            </div>
+        </div>
+
+        <div class="screen active" id="screenHome">
+            <div class="home-content">
+                <div class="home-heading">
+                    <div class="home-eyebrow">Visão Geral dos Módulos</div>
+                    <h1>Experiências digitais de <em>Autoatendimento</em></h1>
+                    <p>Três jornadas completas — alimentação, automotivo e saúde — projetadas pela INFINITYCORP para demonstrar o potencial da plataforma em ambientes reais.</p>
+                </div>
+                <div class="home-grid">
+                    <div class="home-card" onclick="startFlow('fastfood')">
+                        <div class="home-icon" id="iconFood"></div>
+                        <div class="idx">Módulo 01</div>
+                        <h2>Alimentação</h2>
+                        <p>Cardápio digital, personalização de pedidos, carrinho e pagamento integrado.</p>
+                        <div class="card-accent"></div>
+                    </div>
+                    <div class="home-card" onclick="startFlow('vehicle')">
+                        <div class="home-icon" id="iconCar"></div>
+                        <div class="idx">Módulo 02</div>
+                        <h2>Automotivo</h2>
+                        <p>Configuração completa de veículos — modelo, cor, motorização e acessórios.</p>
+                        <div class="card-accent"></div>
+                    </div>
+                    <div class="home-card" onclick="startFlow('clinic')">
+                        <div class="home-icon" id="iconClinic"></div>
+                        <div class="idx">Módulo 03</div>
+                        <h2>Saúde</h2>
+                        <p>Agendamento, senha digital, exames e avaliação do atendimento.</p>
+                        <div class="card-accent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen" id="screenFastFood">
+            <div class="flow-container">
+                <div class="flow-header">
+                    <button class="btn-back" onclick="flowBack()">← Voltar</button>
+                    <div class="breadcrumbs" id="ffBreadcrumbs"><span class="active">Categoria</span></div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill" id="ffProgress" style="width:0%"></div></div>
+                </div>
+                <div class="flow-body" id="ffBody"></div>
+                <div class="flow-footer" id="ffFooter"></div>
+            </div>
+        </div>
+
+        <div class="screen" id="screenVehicle">
+            <div class="flow-container">
+                <div class="flow-header">
+                    <button class="btn-back" onclick="flowBack()">← Voltar</button>
+                    <div class="breadcrumbs" id="vhBreadcrumbs"><span class="active">Modelo</span></div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill" id="vhProgress" style="width:0%"></div></div>
+                </div>
+                <div class="flow-body" id="vhBody"></div>
+                <div class="flow-footer" id="vhFooter"></div>
+            </div>
+        </div>
+
+        <div class="screen" id="screenClinic">
+            <div class="flow-container">
+                <div class="flow-header">
+                    <button class="btn-back" onclick="flowBack()">← Voltar</button>
+                    <div class="breadcrumbs" id="clBreadcrumbs"><span class="active">Atendimento</span></div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill" id="clProgress" style="width:0%"></div></div>
+                </div>
+                <div class="flow-body" id="clBody"></div>
+                <div class="flow-footer" id="clFooter"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // STATE
+        // ============================================================
+        const AppState = {
+            currentFlow: null,
+            currentStep: 0,
+            ff: { category: null, products: [], cart: [], discount: 0, paymentMethod: null, orderNumber: null },
+            vh: { model: null, engine: null, extColor: '#FFFFFF', intColor: 'Couro Preto', wheels: '18"', packages: [], orderNumber: null },
+            cl: { serviceType: null, ticketNumber: null, patientName: '', specialty: '', doctor: '', symptoms: '', exams: [], rating: 0 },
+            attractorTimeout: null,
+            inactivityTimeout: null,
+        };
+        const ATTRACTOR_DELAY = 60000;
+        const RESET_DELAY = 180000;
+
+        // ============================================================
+        // HELPERS
+        // ============================================================
+        function isLightColor(hex) {
+            const h = hex.replace('#','');
+            const r = parseInt(h.slice(0,2), 16);
+            const g = parseInt(h.slice(2,4), 16);
+            const b = parseInt(h.slice(4,6), 16);
+            return (r * 0.299 + g * 0.587 + b * 0.114) > 150;
+        }
+        function mono(label, two) {
+            const t = (label || '').trim();
+            if (!t) return '<span class="mono">?</span>';
+            if (two) {
+                const parts = t.split(/\s+/);
+                const a = parts[0].charAt(0);
+                const b = parts.length > 1 ? parts[parts.length - 1].charAt(0) : '';
+                return `<span class="mono">${(a + b).toUpperCase()}</span>`;
+            }
+            return `<span class="mono">${t.charAt(0).toUpperCase()}</span>`;
+        }
+        function imgHtml(src, label) {
+            const init = (label || '?').trim().charAt(0).toUpperCase();
+            return `<img src="${src}" alt="${label}" loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.style.display='none';this.parentElement.classList.add('has-fallback')">
+                <span class="img-fallback"><span class="mono">${init}</span></span>`;
+        }
+        function fmtBRL(v) { return 'R$ ' + (v || 0).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+        function svgIcon(name) {
+            const s = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+            switch (name) {
+                case 'car': return s('<path d="M4 15l1.6-4.8A2 2 0 0 1 7.5 9h9a2 2 0 0 1 1.9 1.2L20 15"/><path d="M3 15h18v2.5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V15z"/><circle cx="7" cy="18" r="1.4"/><circle cx="17" cy="18" r="1.4"/><path d="M9 18h6"/>');
+                case 'food': return s('<path d="M7 3v7a2 2 0 0 1-2 2 2 2 0 0 1-2-2V3"/><path d="M5 12v9"/><path d="M17 3v6a4 4 0 0 1-4 4 4 4 0 0 1-4-4V3"/><path d="M13 3v3M17 3v3"/>');
+                case 'clinic': return s('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/>');
+                default: return s('');
+            }
+        }
+function paymentIcon(type) {
+    const s = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+    switch (type) {
+        case 'pix': return `<svg viewBox="0 0 24 24"><path d="M12 2 21 12 12 22 3 12Z" fill="currentColor"/></svg>`;
+        case 'credit': return s('<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>');
+        case 'debit': return s('<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="m9 15 2 2 4-4"/>');
+        case 'meal': return s('<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>');
+        case 'cash': return s('<rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>');
+        default: return s('');
+    }
+}
+
+        // ============================================================
+        // FULLSCREEN
+        // ============================================================
+        function toggleFullscreen() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                const el = document.documentElement;
+                if (el.requestFullscreen) el.requestFullscreen();
+                else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            }
+        }
+
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
+        function showScreen(screenId, cb) {
+            const active = document.querySelector('.screen.active');
+            if (active) {
+                active.classList.add('exiting');
+                setTimeout(() => active.classList.remove('active','exiting'), 280);
+            }
+            setTimeout(() => {
+                const screen = document.getElementById(screenId);
+                if (!screen) return;
+                screen.classList.remove('exiting');
+                screen.classList.add('active');
+                if (typeof cb === 'function') cb();
+            }, 300);
+        }
+        function startFlow(flowType) {
+            AppState.currentFlow = flowType;
+            AppState.currentStep = 0;
+            updateCartVisibility();
+            if (flowType === 'fastfood') {
+                AppState.ff = { category: null, products: [], cart: [], discount: 0, paymentMethod: null, orderNumber: null };
+                updateCartBadge();
+                showScreen('screenFastFood', () => renderFastFoodStep());
+            } else if (flowType === 'vehicle') {
+                AppState.vh = { model: null, engine: null, extColor: '#FFFFFF', intColor: 'Couro Preto', wheels: '18"', packages: [], orderNumber: null };
+                showScreen('screenVehicle', () => renderVehicleStep());
+            } else if (flowType === 'clinic') {
+                AppState.cl = { serviceType: null, ticketNumber: null, patientName: '', specialty: '', doctor: '', symptoms: '', exams: [], rating: 0 };
+                showScreen('screenClinic', () => renderClinicStep());
+            }
+            resetInactivityTimer();
+        }
+        function goHome() {
+            AppState.currentFlow = null;
+            AppState.currentStep = 0;
+            updateCartVisibility(); 
+            showScreen('screenHome');
+            resetInactivityTimer();
+        }
+        function flowBack() {
+            if (AppState.currentStep > 0) { AppState.currentStep--; renderCurrentStep(); }
+            else goHome();
+            resetInactivityTimer();
+        }
+        function flowNext() { AppState.currentStep++; renderCurrentStep(); resetInactivityTimer(); }
+        function renderCurrentStep() {
+            if (AppState.currentFlow === 'fastfood') renderFastFoodStep();
+            else if (AppState.currentFlow === 'vehicle') renderVehicleStep();
+            else if (AppState.currentFlow === 'clinic') renderClinicStep();
+        }
+        function setFlowHeader(prefix, steps, activeIdx) {
+            const bc = document.getElementById(prefix + 'Breadcrumbs');
+            const pb = document.getElementById(prefix + 'Progress');
+            if (bc) bc.innerHTML = steps.map((s,i) =>
+                `<span class="${i === activeIdx ? 'active' : ''}">${s}</span>${i < steps.length-1 ? '<span class="sep">›</span>' : ''}`
+            ).join('');
+            if (pb) pb.style.width = Math.round((activeIdx / (steps.length - 1)) * 100) + '%';
+        }
+
+        // ============================================================
+        // FAST FOOD DATA
+        // ============================================================
+        const FF_STEPS = ['Categoria','Produtos','Personalização','Carrinho','Pagamento','Confirmação'];
+        const FF_CATEGORIES = [
+            { id: 'burgers', name: 'Hambúrgueres', desc: 'Clássicos e premium' },
+            { id: 'combos', name: 'Combos', desc: 'Lanche + batata + bebida' },
+            { id: 'fries', name: 'Batatas', desc: 'Diversos tamanhos' },
+            { id: 'drinks', name: 'Bebidas', desc: 'Refrigerantes e sucos' },
+            { id: 'desserts', name: 'Sobremesas', desc: 'Doces selecionados' },
+            { id: 'sauces', name: 'Molhos', desc: 'Para acompanhar' },
+            { id: 'promos', name: 'Promoções', desc: 'Ofertas especiais' },
+        ];
+        const FF_PRODUCTS = {
+            burgers: [
+                { id:'b1', name:'Classic Burger', desc:'Carne 180g, queijo, alface, tomate', price:28.90, photo:'food/burger-classic.jpg' },
+                { id:'b2', name:'Bacon Supreme', desc:'Carne 200g, bacon crispy, cheddar', price:35.90, photo:'food/burger-bacon.jpg' },
+                { id:'b3', name:'Duplo Cheddar', desc:'Duas carnes, cheddar cremoso', price:39.90, photo:'food/burger-duplo.jpg' },
+                { id:'b4', name:'Veggie Burger', desc:'Hambúrguer de grão-de-bico', price:32.90, photo:'food/burger-veggie.jpg' },
+            ],
+            combos: [
+                { id:'c1', name:'Combo Clássico', desc:'Burger + Batata M + Refri', price:42.90, photo:'food/combo-classico.jpg' },
+                { id:'c2', name:'Combo Família', desc:'4 Burgers + Batata G + 4 Refris', price:99.90, photo:'food/combo-familia.jpg' },
+            ],
+            fries: [
+                { id:'f1', name:'Batata Pequena', desc:'Porção individual', price:12.90, photo:'food/batata-p.jpg' },
+                { id:'f2', name:'Batata Grande', desc:'Para compartilhar', price:22.90, photo:'food/batata-g.jpg' },
+                { id:'f3', name:'Batata com Cheddar', desc:'Cobertura de cheddar e bacon', price:28.90, photo:'food/batata-cheddar.jpg' },
+            ],
+            drinks: [
+                { id:'d1', name:'Refrigerante 350ml', desc:'Coca-Cola, Guaraná, Fanta', price:8.90, photo:'food/refri.jpg' },
+                { id:'d2', name:'Suco Natural 500ml', desc:'Laranja, Abacaxi, Manga', price:14.90, photo:'food/suco.jpg' },
+                { id:'d3', name:'Milkshake 400ml', desc:'Chocolate, Morango, Baunilha', price:18.90, photo:'food/milkshake.jpg' },
+            ],
+            desserts: [
+                { id:'s1', name:'Sundae', desc:'Sorvete com calda', price:15.90, photo:'food/sundae.jpg' },
+                { id:'s2', name:'Torta de Maçã', desc:'Fatia quente com canela', price:12.90, photo:'food/torta-maca.jpg' },
+            ],
+            sauces: [
+                { id:'sa1', name:'Molho Especial', desc:'Receita da casa', price:3.90, photo:'food/molho-especial.jpg' },
+                { id:'sa2', name:'BBQ Defumado', desc:'Molho barbecue artesanal', price:4.90, photo:'food/molho-bbq.jpg' },
+            ],
+            promos: [
+                { id:'p1', name:'Promo Dupla', desc:'2 Burgers pelo preço de 1', price:32.90, photo:'food/promo-dupla.jpg', badge:'-50%' },
+            ],
+        };
+        const BURGER_CUSTOMS = [
+            { id:'bacon', name:'Adicionar Bacon', price:6.00 },
+            { id:'onion', name:'Remover Cebola', price:0 },
+            { id:'pickles', name:'Sem Picles', price:0 },
+            { id:'extraCheese', name:'Queijo Extra', price:4.00 },
+            { id:'specialSauce', name:'Molho Especial', price:3.00 },
+            { id:'brioche', name:'Pão Brioche', price:3.00 },
+            { id:'doubleMeat', name:'Carne Dupla', price:12.00 },
+            { id:'veggie', name:'Opção Vegetariana', price:0 },
+        ];
+        const PAYMENT_METHODS = [
+    { name:'Pix', icon:'pix' },
+    { name:'Crédito', icon:'credit' },
+    { name:'Débito', icon:'debit' },
+    { name:'Vale Refeição', icon:'meal' },
+    { name:'Dinheiro', icon:'cash' },
+];
+
+
+        // ============================================================
+        // FAST FOOD RENDERER
+        // ============================================================
+        function renderFastFoodStep() {
+            const body = document.getElementById('ffBody');
+            const footer = document.getElementById('ffFooter');
+            const step = AppState.currentStep;
+            setFlowHeader('ff', FF_STEPS, step);
+            let html = '', foot = '';
+
+            if (step === 0) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${FF_STEPS.length}</span><h2 class="section-title">Categoria</h2><p class="section-note">Selecione o segmento do cardápio.</p></div>
+                    <div class="cards-grid">${FF_CATEGORIES.map(c => `
+                    <div class="card ${AppState.ff.category === c.id ? 'selected' : ''}" onclick="selectFFCategory('${c.id}')">
+                        ${mono(c.name)}
+                        <h3>${c.name}</h3>
+                        <p>${c.desc}</p>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="goHome()">Início</button>`;
+
+            } else if (step === 1) {
+                const cat = FF_CATEGORIES.find(c => c.id === AppState.ff.category);
+                const prods = FF_PRODUCTS[AppState.ff.category] || [];
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${FF_STEPS.length}</span><h2 class="section-title">${cat ? cat.name : 'Produtos'}</h2></div>
+                    <div class="cards-grid">${prods.map(p => `
+                    <div class="product-card">
+                        <div class="product-img">${imgHtml(p.photo, p.name)}${p.badge ? `<span class="img-badge">${p.badge}</span>` : ''}</div>
+                        <div class="product-info">
+                            <h3>${p.name}</h3>
+                            <p class="desc">${p.desc}</p>
+                            <div class="price-row">
+                                <span class="price">${fmtBRL(p.price)}</span>
+                                <button class="btn-add" onclick="addToCart('${p.id}', this)">Adicionar</button>
+                            </div>
+                        </div>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" onclick="flowNext()">Ver Carrinho</button>`;
+
+            } else if (step === 2) {
+                const hasBurger = AppState.ff.cart.some(i => i.isBurger);
+                if (!hasBurger) {
+                    html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${FF_STEPS.length}</span><h2 class="section-title">Personalização</h2></div>
+                        <div class="card-simulation"><p style="font-size:1.1rem;color:var(--text-secondary)">Adicione um hambúrguer ao carrinho para personalizá-lo.</p></div>`;
+                } else {
+                    const customIds = AppState.ff.cart.filter(i => i.isBurger)[0]?.customs || [];
+                    html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${FF_STEPS.length}</span><h2 class="section-title">Personalização</h2><p class="section-note">As alterações valem para todos os hambúrgueres do carrinho.</p></div>
+                        <div class="custom-options">${BURGER_CUSTOMS.map(c => `
+                        <div class="custom-option ${customIds.includes(c.id) ? 'selected' : ''}" onclick="toggleCustom('${c.id}')">
+                            <div class="opt-info"><h4>${c.name}</h4></div>
+                            <span class="opt-price">${c.price > 0 ? '+ ' + fmtBRL(c.price) : 'Incluso'}</span>
+                            <div class="toggle-switch ${customIds.includes(c.id) ? 'active' : ''}"></div>
+                        </div>`).join('')}</div>`;
+                }
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" onclick="flowNext()">Avançar</button>`;
+
+            } else if (step === 3) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${FF_STEPS.length}</span><h2 class="section-title">Carrinho</h2></div>`;
+                if (AppState.ff.cart.length === 0) {
+                    html += `<div class="card-simulation"><p style="font-size:1.1rem;color:var(--text-secondary)">Seu carrinho está vazio.</p></div>`;
+                } else {
+                    html += `<div class="cart-list">${AppState.ff.cart.map((item, idx) => {
+                        const customNames = (item.customs || []).map(id => BURGER_CUSTOMS.find(c => c.id === id)?.name).filter(Boolean);
+                        const unit = item.price + (item.customs || []).reduce((s,id) => s + (BURGER_CUSTOMS.find(c=>c.id===id)?.price || 0), 0);
+                        return `<div class="cart-item">
+                            <div class="cart-item-img">${item.photo ? `<img src="${item.photo}" onerror="this.remove();this.parentElement.innerHTML='<span class=&quot;mono-sm&quot;>${item.name.charAt(0).toUpperCase()}</span>'">` : `<span class="mono-sm">${item.name.charAt(0).toUpperCase()}</span>`}</div>
+                            <div class="cart-item-info">
+                                <h4>${item.name}</h4>
+                                ${customNames.length ? `<div class="customs">${customNames.join(', ')}</div>` : ''}
+                            </div>
+                            <div class="cart-item-qty">
+                                <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
+                                <span style="font-weight:500;min-width:22px;text-align:center">${item.qty}</span>
+                                <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
+                            </div>
+                            <div class="cart-item-price">${fmtBRL(unit * item.qty)}</div>
+                            <button class="cart-item-remove" onclick="removeFromCart(${idx})">Remover</button>
+                        </div>`;
+                    }).join('')}</div>`;
+                    html += `<div class="cart-summary">
+                        <div class="discount-input">
+                            <input id="discountCode" placeholder="Cupom de desconto" value="${AppState.ff.discount > 0 ? 'CUPOM10' : ''}">
+                            <button onclick="applyDiscount()">Aplicar</button>
+                        </div>
+                        <div class="row"><span>Subtotal</span><span>${fmtBRL(cartSubtotal())}</span></div>
+                        ${AppState.ff.discount > 0 ? `<div class="row"><span>Desconto (10%)</span><span style="color:var(--green-light)">- ${fmtBRL(cartSubtotal() * 0.1)}</span></div>` : ''}
+                        <div class="row total"><span>Total</span><span>${fmtBRL(cartTotal())}</span></div>
+                    </div>`;
+                }
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" ${AppState.ff.cart.length === 0 ? 'disabled' : ''} onclick="flowNext()">Pagamento</button>`;
+
+            } else if (step === 4) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${FF_STEPS.length}</span><h2 class="section-title">Pagamento</h2><p class="section-note">Selecione a forma de pagamento.</p></div>
+    <div class="payment-methods">${PAYMENT_METHODS.map(m => `
+    <div class="payment-method ${AppState.ff.paymentMethod === m.name ? 'selected' : ''}" onclick="selectPayment('${m.name}')">
+        <div class="pay-icon">${paymentIcon(m.icon)}</div><span>${m.name}</span>
+    </div>`).join('')}</div>`;
+
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" ${!AppState.ff.paymentMethod ? 'disabled' : ''} onclick="confirmOrder()">Confirmar</button>`;
+
+            } else if (step === 5) {
+                html = `<div class="ticket">
+                    <div class="eyebrow" style="text-align:center">Pedido confirmado</div>
+                    <p style="color:var(--text-secondary);margin-bottom:0.5rem">Número do pedido</p>
+                    <div class="ticket-number">#${String(AppState.ff.orderNumber || 1000).padStart(4,'0')}</div>
+                    <p style="color:var(--text-secondary);margin-top:1.4rem">${AppState.ff.paymentMethod} • Total ${fmtBRL(cartTotal())}</p>
+                </div>`;
+                foot = `<button class="btn-primary" style="width:100%" onclick="finishOrder()">Finalizar</button>`;
+            }
+
+            body.innerHTML = html;
+            footer.innerHTML = foot;
+        }
+
+        function selectFFCategory(id) {
+            AppState.ff.category = id;
+            flowNext(); // seleciona e avança automaticamente
+        }
+        function cartSubtotal() {
+            return AppState.ff.cart.reduce((s, item) => {
+                const unit = item.price + (item.customs || []).reduce((x,id) => x + (BURGER_CUSTOMS.find(c=>c.id===id)?.price || 0), 0);
+                return s + unit * item.qty;
+            }, 0);
+        }
+        function cartTotal() {
+            const sub = cartSubtotal();
+            return sub - (AppState.ff.discount > 0 ? sub * 0.1 : 0);
+        }
+        function addToCart(id, btnEl) {
+            const cat = AppState.ff.category;
+            const p = (FF_PRODUCTS[cat] || []).find(x => x.id === id);
+            if (!p) return;
+            const isBurger = cat === 'burgers';
+            const existing = AppState.ff.cart.find(i => i.id === id);
+            if (existing) { existing.qty++; }
+            else { AppState.ff.cart.push({ id: p.id, name: p.name, price: p.price, photo: p.photo, qty: 1, isBurger, customs: [] }); }
+
+            updateCartBadge();
+            if (btnEl) flyToCart(btnEl, p);
+            renderCurrentStep();
+        }
+        function changeQty(idx, delta) {
+            const item = AppState.ff.cart[idx];
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) AppState.ff.cart.splice(idx, 1);
+            updateCartBadge();
+            renderCurrentStep();
+        }
+        function removeFromCart(idx) {
+            AppState.ff.cart.splice(idx, 1);
+            updateCartBadge();
+            renderCurrentStep();
+        }
+        function toggleCustom(customId) {
+            AppState.ff.cart.forEach(item => {
+                if (!item.isBurger) return;
+                if (item.customs.includes(customId)) item.customs = item.customs.filter(c => c !== customId);
+                else item.customs.push(customId);
+            });
+            renderCurrentStep();
+        }
+        function applyDiscount() {
+            const code = (document.getElementById('discountCode')?.value || '').trim().toUpperCase();
+            if (code === 'CUPOM10' || code === 'CUPOM') {
+                AppState.ff.discount = 10;
+                showToast('Cupom aplicado: 10% de desconto', 'success');
+            } else {
+                AppState.ff.discount = 0;
+                showToast('Cupom inválido', 'error');
+            }
+            renderCurrentStep();
+        }
+        function selectPayment(name) { AppState.ff.paymentMethod = name; renderCurrentStep(); }
+        function confirmOrder() {
+            AppState.ff.orderNumber = Math.floor(1000 + Math.random() * 9000);
+            flowNext();
+        }
+        function finishOrder() {
+    AppState.ff.cart = [];
+    AppState.ff.discount = 0;
+    AppState.ff.paymentMethod = null;
+    AppState.ff.orderNumber = null;
+    updateCartBadge();
+    closeCartDropdown();
+    goHome();
+}
+
+        // ============================================================
+        // VEHICLE DATA
+        // ============================================================
+        const VH_STEPS = ['Modelo','Motor','Cor Externa','Cor Interna','Rodas','Pacotes','Resumo','Confirmação'];
+        const VH_MODELS = [
+            { id:'sedan', name:'Sedan Premium', desc:'Conforto e elegância', basePrice:95000, photo:'vehicle/modelo-sedan.png' },
+            { id:'suv', name:'SUV Adventure', desc:'Versatilidade e espaço', basePrice:135000, photo:'vehicle/modelo-suv.png' },
+            { id:'hatch', name:'Hatch Compacto', desc:'Agilidade urbana', basePrice:75000, photo:'vehicle/modelo-hatch.png' },
+            { id:'sport', name:'Esportivo GT', desc:'Performance pura', basePrice:180000, photo:'vehicle/modelo-sport.png' },
+            { id:'pickup', name:'Picape Robust', desc:'Força e robustez', basePrice:160000, photo:'vehicle/modelo-picape.png' },
+        ];
+        const VH_ENGINES = [
+            { id:'e10', name:'1.0 Turbo', price:0, desc:'Econômico', photo:'vehicle/motor-10turbo.jpg' },
+            { id:'e16', name:'1.6 Aspirado', price:5000, desc:'Equilíbrio ideal', photo:'vehicle/motor-16.jpg' },
+            { id:'e20', name:'2.0 Turbo', price:15000, desc:'Alta performance', photo:'vehicle/motor-20turbo.jpg' },
+            { id:'hybrid', name:'Híbrido', price:25000, desc:'Sustentável', photo:'vehicle/motor-hibrido.jpg' },
+            { id:'electric', name:'Elétrico', price:35000, desc:'Zero emissão', photo:'vehicle/motor-eletrico.jpg' },
+        ];
+        const VH_COLORS = [
+            { name:'Branco', hex:'#FFFFFF' },
+            { name:'Preto', hex:'#111111' },
+            { name:'Prata', hex:'#C0C0C0' },
+            { name:'Vermelho', hex:'#DC2626' },
+            { name:'Azul', hex:'#2563EB' },
+            { name:'Verde', hex:'#059669' },
+            { name:'Amarelo', hex:'#FBBF24' },
+            { name:'Cinza', hex:'#6B7280' },
+        ];
+        const VH_INTERIORS = [
+            { name:'Couro Preto', color:'#1A1A1A', price:0, photo:'vehicle/interior-preto.jpg' },
+            { name:'Bege', color:'#D4B896', price:2000, photo:'vehicle/interior-bege.jpg' },
+            { name:'Marrom', color:'#5C3A21', price:3000, photo:'vehicle/interior-marrom.jpg' },
+            { name:'Cinza', color:'#9CA3AF', price:1500, photo:'vehicle/interior-cinza.jpg' },
+            { name:'Branco', color:'#F5F5F0', price:4000, photo:'vehicle/interior-branco.jpg' },
+        ];
+        const VH_WHEELS = [
+            { id:'w17', name:'17" Liga Leve', price:0 },
+            { id:'w18', name:'18" Esportiva', price:2000 },
+            { id:'w19', name:'19" Premium', price:4500 },
+            { id:'w20', name:'20" Forjada', price:7000 },
+        ];
+        const VH_PACKAGES = [
+            { id:'pk1', name:'Pacote Comfort', price:5000, desc:'Ar digital, bancos aquecidos' },
+            { id:'pk2', name:'Pacote Tech', price:8000, desc:'Multimídia, ADAS, câmeras' },
+            { id:'pk3', name:'Pacote Sport', price:6000, desc:'Aerofólio, escapamento esportivo' },
+            { id:'pk4', name:'Pacote Premium', price:12000, desc:'Todos os itens inclusos' },
+        ];
+
+        // ============================================================
+        // VEHICLE RENDERER
+        // ============================================================
+        function renderVehiclePhoto() {
+            const model = VH_MODELS.find(m => m.id === AppState.vh.model) || VH_MODELS[0];
+            const cor = AppState.vh.extColor;
+            const light = isLightColor(cor);
+            const multOpacity = light ? 0.35 : 0.65;
+            const colorOpacity = light ? 0.45 : 0.6;
+            return `<div class="vehicle-photo-wrap">
+                <img src="${model.photo}" alt="${model.name}" class="vehicle-photo" onerror="this.style.display='none'">
+                <div class="vehicle-tint" style="background:${cor};opacity:${multOpacity}"></div>
+                <div class="vehicle-color" style="background:${cor};opacity:${colorOpacity}"></div>
+                <div class="vehicle-shading"></div>
+            </div>`;
+        }
+        function applyVehicleMask() {
+            document.querySelectorAll('.vehicle-photo-wrap').forEach(wrap => {
+                const img = wrap.querySelector('.vehicle-photo');
+                if (!img) return;
+                const src = img.src;
+                wrap.querySelectorAll('.vehicle-tint, .vehicle-color, .vehicle-shading').forEach(el => {
+                    el.style.webkitMaskImage = `url('${src}')`;
+                    el.style.maskImage = `url('${src}')`;
+                    el.style.webkitMaskSize = '100% 100%';
+                    el.style.maskSize = '100% 100%';
+                    el.style.webkitMaskRepeat = 'no-repeat';
+                    el.style.maskRepeat = 'no-repeat';
+                    el.style.webkitMaskPosition = 'center';
+                    el.style.maskPosition = 'center';
+                });
+            });
+        }
+
+        function vhEnginePrice() { const e = VH_ENGINES.find(x => x.id === AppState.vh.engine); return e ? e.price : 0; }
+        function vhInteriorPrice() { const i = VH_INTERIORS.find(x => x.name === AppState.vh.intColor); return i ? i.price : 0; }
+        function vhWheelPrice() { const w = VH_WHEELS.find(x => x.id === AppState.vh.wheels); return w ? w.price : 0; }
+        function vhPackagesPrice() { return AppState.vh.packages.reduce((s,id) => s + (VH_PACKAGES.find(p=>p.id===id)?.price || 0), 0); }
+        function vhTotal() {
+            const model = VH_MODELS.find(m => m.id === AppState.vh.model);
+            return (model ? model.basePrice : 0) + vhEnginePrice() + vhInteriorPrice() + vhWheelPrice() + vhPackagesPrice();
+        }
+
+        function renderVehicleStep() {
+            const body = document.getElementById('vhBody');
+            const footer = document.getElementById('vhFooter');
+            const step = AppState.currentStep;
+            setFlowHeader('vh', VH_STEPS, step);
+            let html = '', foot = '';
+
+            if (step === 0) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${VH_STEPS.length}</span><h2 class="section-title">Modelo</h2><p class="section-note">Selecione a linha de veículo.</p></div>
+                    <div class="cards-grid">${VH_MODELS.map(m => `
+                    <div class="product-card ${AppState.vh.model === m.id ? 'selected' : ''}" onclick="selectVHModel('${m.id}')">
+                        <div class="product-img">${imgHtml(m.photo, m.name)}</div>
+                        <div class="product-info">
+                            <h3>${m.name}</h3>
+                            <p class="desc">${m.desc}</p>
+                            <div class="price-row"><span class="price">${fmtBRL(m.basePrice)}</span></div>
+                        </div>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>`;
+
+            } else if (step === 1) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${VH_STEPS.length}</span><h2 class="section-title">Motorização</h2></div>
+                    <div class="cards-grid">${VH_ENGINES.map(e => `
+                    <div class="product-card ${AppState.vh.engine === e.id ? 'selected' : ''}" onclick="selectVHEngine('${e.id}')">
+                        <div class="product-img">${imgHtml(e.photo, e.name)}</div>
+                        <div class="product-info">
+                            <h3>${e.name}</h3>
+                            <p class="desc">${e.desc}</p>
+                            <div class="price-row"><span class="price">${e.price > 0 ? '+ ' + fmtBRL(e.price) : 'Incluso'}</span></div>
+                        </div>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>`;
+
+            } else if (step === 2) {
+                const corNome = VH_COLORS.find(c => c.hex === AppState.vh.extColor)?.name || 'Branco';
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${VH_STEPS.length}</span><h2 class="section-title">Cor Externa</h2></div>
+                    <div class="vehicle-preview">
+                        ${renderVehiclePhoto()}
+                        <div class="vehicle-color-name">${corNome}</div>
+                    </div>
+                    <div class="color-swatches">${VH_COLORS.map(c => `
+                        <div class="color-swatch ${AppState.vh.extColor === c.hex ? 'selected' : ''}"
+                             style="background:${c.hex}${c.hex === '#FFFFFF' ? ';border:2px solid var(--border-strong)' : ''}"
+                             onclick="selectVHColor('${c.hex}')" title="${c.name}">
+                            <span class="check" style="color:${isLightColor(c.hex) ? '#0F172A' : '#FFF'}">✓</span>
+                        </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" onclick="flowNext()">Avançar</button>`;
+
+            } else if (step === 3) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${VH_STEPS.length}</span><h2 class="section-title">Cor Interna</h2></div>
+                    <div class="cards-grid">${VH_INTERIORS.map(i => `
+                    <div class="product-card ${AppState.vh.intColor === i.name ? 'selected' : ''}" onclick="selectVHInterior('${i.name}')">
+                        <div class="product-img">${imgHtml(i.photo, i.name)}</div>
+                        <div class="product-info">
+                            <h3>${i.name}</h3>
+                            <div class="price-row"><span class="price">${i.price > 0 ? '+ ' + fmtBRL(i.price) : 'Incluso'}</span></div>
+                        </div>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" onclick="flowNext()">Avançar</button>`;
+
+            } else if (step === 4) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${VH_STEPS.length}</span><h2 class="section-title">Rodas</h2></div>
+                    <div class="cards-grid">${VH_WHEELS.map(w => `
+                    <div class="card ${AppState.vh.wheels === w.id ? 'selected' : ''}" onclick="selectVHWheel('${w.id}')">
+                        ${mono(w.name)}
+                        <h3>${w.name}</h3>
+                        <p class="card-price">${w.price > 0 ? '+ ' + fmtBRL(w.price) : 'Incluso'}</p>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" onclick="flowNext()">Avançar</button>`;
+
+            } else if (step === 5) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${VH_STEPS.length}</span><h2 class="section-title">Pacotes</h2></div>
+                    <div class="cards-grid">${VH_PACKAGES.map(p => `
+                    <div class="card ${AppState.vh.packages.includes(p.id) ? 'selected' : ''}" onclick="toggleVHPackage('${p.id}')">
+                        ${mono(p.name)}
+                        <h3>${p.name}</h3>
+                        <p>${p.desc}</p>
+                        <p class="card-price">+ ${fmtBRL(p.price)}</p>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" onclick="flowNext()">Resumo</button>`;
+
+            } else if (step === 6) {
+                const model = VH_MODELS.find(m => m.id === AppState.vh.model) || VH_MODELS[0];
+                const eng = VH_ENGINES.find(e => e.id === AppState.vh.engine) || VH_ENGINES[0];
+                const cor = VH_COLORS.find(c => c.hex === AppState.vh.extColor)?.name || 'Branco';
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${VH_STEPS.length}</span><h2 class="section-title">Resumo</h2></div>
+                    <div class="vehicle-preview">${renderVehiclePhoto()}</div>
+                    <div class="cart-summary">
+                        <div class="row"><span>Modelo</span><span>${model.name}</span></div>
+                        <div class="row"><span>Motor</span><span>${eng.name}</span></div>
+                        <div class="row"><span>Cor Externa</span><span>${cor}</span></div>
+                        <div class="row"><span>Cor Interna</span><span>${AppState.vh.intColor}</span></div>
+                        <div class="row"><span>Rodas</span><span>${VH_WHEELS.find(w=>w.id===AppState.vh.wheels)?.name}</span></div>
+                        <div class="row"><span>Pacotes</span><span>${AppState.vh.packages.length ? AppState.vh.packages.map(id => VH_PACKAGES.find(p=>p.id===id)?.name).join(', ') : 'Nenhum'}</span></div>
+                        <div class="row total"><span>Valor Total</span><span>${vhTotal().toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}</span></div>
+                    </div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" onclick="confirmVehicle()">Confirmar</button>`;
+                    } else if (step === 7) {
+    html = `<div class="ticket">
+        <div class="eyebrow" style="text-align:center">Pedido confirmado</div>
+        <p style="color:var(--text-secondary);margin-bottom:0.5rem">Número do pedido</p>
+        <div class="ticket-number">#${String(AppState.vh.orderNumber || 1000).padStart(4,'0')}</div>
+        <p style="color:var(--text-secondary);margin-top:1.4rem">Valor total ${vhTotal().toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}</p>
+    </div>`;
+    foot = `<button class="btn-primary" style="width:100%" onclick="finishVehicleOrder()">Finalizar</button>`;
+
+
+            }
+
+            body.innerHTML = html;
+            footer.innerHTML = foot;
+            applyVehicleMask();
+        }
+
+        function selectVHModel(id) {
+            AppState.vh.model = id;
+            flowNext();
+        }
+        function selectVHEngine(id) {
+            AppState.vh.engine = id;
+            flowNext();
+        }
+        function selectVHColor(hex) { AppState.vh.extColor = hex; renderCurrentStep(); }
+        function selectVHInterior(name) { AppState.vh.intColor = name; renderCurrentStep(); }
+        function selectVHWheel(id) { AppState.vh.wheels = id; renderCurrentStep(); }
+        function toggleVHPackage(id) {
+            const i = AppState.vh.packages.indexOf(id);
+            if (i >= 0) AppState.vh.packages.splice(i, 1);
+            else AppState.vh.packages.push(id);
+            renderCurrentStep();
+        }
+        function confirmVehicle() {
+            AppState.vh.orderNumber = Math.floor(1000 + Math.random() * 9000);
+            AppState.currentStep++;
+            renderVehicleStep();
+        }
+function finishVehicleOrder() {
+    AppState.vh = { model: null, engine: null, extColor: '#FFFFFF', intColor: 'Couro Preto', wheels: '18"', packages: [], orderNumber: null };
+    goHome();
+}
+
+        // ============================================================
+        // CLINIC DATA
+        // ============================================================
+        const CL_STEPS = ['Atendimento','Dados','Especialidade','Médico','Sintomas','Exames','Senha','Avaliação'];
+        const CL_SERVICES = [
+            { id:'consulta', name:'Consulta', desc:'Consulta médica' },
+            { id:'exame', name:'Exame', desc:'Realizar exames' },
+            { id:'vacina', name:'Vacina', desc:'Imunização' },
+            { id:'retorno', name:'Retorno', desc:'Acompanhamento' },
+        ];
+        const CL_SPECIALTIES = [
+            { id:'geral', name:'Clínico Geral', doctors:['Dr. Carlos Silva','Dra. Ana Souza'] },
+            { id:'cardio', name:'Cardiologia', doctors:['Dr. Paulo Mendes','Dra. Carla Lima'] },
+            { id:'ortop', name:'Ortopedia', doctors:['Dr. Marcos Reis','Dra. Julia Alves'] },
+            { id:'ped', name:'Pediatria', doctors:['Dra. Fernanda Rocha','Dr. André Costa'] },
+            { id:'derma', name:'Dermatologia', doctors:['Dra. Beatriz Nunes','Dr. Lucas Faria'] },
+        ];
+        const CL_EXAMS = [
+            { id:'hemo', name:'Hemograma' },
+            { id:'raio', name:'Raio-X' },
+            { id:'ultra', name:'Ultrassom' },
+            { id:'ecg', name:'Eletrocardiograma' },
+            { id:'tomo', name:'Tomografia' },
+        ];
+
+        // ============================================================
+        // CLINIC RENDERER
+        // ============================================================
+        function renderClinicStep() {
+            const body = document.getElementById('clBody');
+            const footer = document.getElementById('clFooter');
+            const step = AppState.currentStep;
+            setFlowHeader('cl', CL_STEPS, step);
+            let html = '', foot = '';
+
+            if (step === 0) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${CL_STEPS.length}</span><h2 class="section-title">Atendimento</h2><p class="section-note">Selecione o tipo de serviço.</p></div>
+                    <div class="cards-grid">${CL_SERVICES.map(s => `
+                    <div class="card ${AppState.cl.serviceType === s.id ? 'selected' : ''}" onclick="selectCLService('${s.id}')">
+                        ${mono(s.name)}
+                        <h3>${s.name}</h3>
+                        <p>${s.desc}</p>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" ${!AppState.cl.serviceType ? 'disabled' : ''} onclick="flowNext()">Avançar</button>`;
+
+            } else if (step === 1) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${CL_STEPS.length}</span><h2 class="section-title">Dados do Paciente</h2></div>
+                    <div style="max-width:600px">
+                        <div class="form-field"><label>Nome completo</label><input id="clName" value="${AppState.cl.patientName}" placeholder="Digite seu nome"></div>
+                    </div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" onclick="saveCLName()">Avançar</button>`;
+
+            } else if (step === 2) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${CL_STEPS.length}</span><h2 class="section-title">Especialidade</h2></div>
+                    <div class="cards-grid">${CL_SPECIALTIES.map(s => `
+                    <div class="card ${AppState.cl.specialty === s.id ? 'selected' : ''}" onclick="selectCLSpecialty('${s.id}')">
+                        ${mono(s.name)}
+                        <h3>${s.name}</h3>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" ${!AppState.cl.specialty ? 'disabled' : ''} onclick="flowNext()">Avançar</button>`;
+
+            } else if (step === 3) {
+                const spec = CL_SPECIALTIES.find(s => s.id === AppState.cl.specialty);
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${CL_STEPS.length}</span><h2 class="section-title">Profissional</h2></div>
+                    <div class="cards-grid">${(spec ? spec.doctors : []).map(d => `
+                    <div class="card ${AppState.cl.doctor === d ? 'selected' : ''}" onclick="selectCLDoctor('${d}')">
+                        ${mono(d, true)}
+                        <h3>${d}</h3>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" ${!AppState.cl.doctor ? 'disabled' : ''} onclick="flowNext()">Avançar</button>`;
+
+            } else if (step === 4) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${CL_STEPS.length}</span><h2 class="section-title">Sintomas</h2></div>
+                    <div style="max-width:700px">
+                        <div class="form-field"><label>Descreva seus sintomas</label><textarea id="clSymptoms" rows="4" placeholder="Ex.: dor de cabeça e febre há 2 dias">${AppState.cl.symptoms}</textarea></div>
+                    </div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" onclick="saveCLSymptoms()">Avançar</button>`;
+
+            } else if (step === 5) {
+                html = `<div class="section-head"><span class="eyebrow">Etapa ${step+1} de ${CL_STEPS.length}</span><h2 class="section-title">Exames</h2><p class="section-note">Selecione os exames desejados (opcional).</p></div>
+                    <div class="cards-grid">${CL_EXAMS.map(e => `
+                    <div class="card ${AppState.cl.exams.includes(e.id) ? 'selected' : ''}" onclick="toggleCLExam('${e.id}')">
+                        ${mono(e.name)}
+                        <h3>${e.name}</h3>
+                    </div>`).join('')}</div>`;
+                foot = `<button class="btn-secondary" onclick="flowBack()">Voltar</button>
+                    <button class="btn-primary" onclick="generateCLTicket()">Gerar Senha</button>`;
+
+            } else if (step === 6) {
+                const spec = CL_SPECIALTIES.find(s => s.id === AppState.cl.specialty);
+                html = `<div class="ticket">
+                    <div class="eyebrow" style="text-align:center">Senha de atendimento</div>
+                    <div class="ticket-number">${AppState.cl.ticketNumber || '—'}</div>
+                    <div style="margin-top:1.5rem;text-align:left;font-size:0.95rem;color:var(--text-secondary);line-height:1.9">
+                        <div><strong style="color:var(--text);font-weight:500">Paciente:</strong> ${AppState.cl.patientName || '—'}</div>
+                        <div><strong style="color:var(--text);font-weight:500">Especialidade:</strong> ${spec ? spec.name : '—'}</div>
+                        <div><strong style="color:var(--text);font-weight:500">Profissional:</strong> ${AppState.cl.doctor || '—'}</div>
+                    </div>
+                    <div class="qr-code" id="clQr"></div>
+                </div>`;
+                foot = `<button class="btn-primary" style="width:100%" onclick="flowNext()">Concluir</button>`;
+
+            } else if (step === 7) {
+                html = `<div class="section-head" style="text-align:center"><span class="eyebrow" style="display:inline-block">Avaliação</span><h2 class="section-title" style="justify-content:center">Como foi sua experiência?</h2></div>
+                    <div class="star-rating">${[1,2,3,4,5].map(n => `
+                        <span class="star ${AppState.cl.rating >= n ? 'active' : ''}" onclick="setCLRating(${n})">★</span>`).join('')}</div>
+                    <p style="text-align:center;margin-top:1rem;font-weight:500;color:var(--text-secondary)">${AppState.cl.rating ? AppState.cl.rating + ' / 5' : 'Toque nas estrelas'}</p>`;
+                foot = `<button class="btn-primary" style="width:100%" ${AppState.cl.rating === 0 ? 'disabled' : ''} onclick="finishClinic()">Finalizar</button>`;
+            }
+
+            body.innerHTML = html;
+            footer.innerHTML = foot;
+
+            if (step === 6) setTimeout(renderQR, 50);
+        }
+
+        function selectCLService(id) { AppState.cl.serviceType = id; renderCurrentStep(); }
+        function saveCLName() { AppState.cl.patientName = document.getElementById('clName').value.trim(); flowNext(); }
+        function selectCLSpecialty(id) { AppState.cl.specialty = id; AppState.cl.doctor = ''; renderCurrentStep(); }
+        function selectCLDoctor(d) { AppState.cl.doctor = d; renderCurrentStep(); }
+        function saveCLSymptoms() { AppState.cl.symptoms = document.getElementById('clSymptoms').value.trim(); flowNext(); }
+        function toggleCLExam(id) {
+            const i = AppState.cl.exams.indexOf(id);
+            if (i >= 0) AppState.cl.exams.splice(i, 1);
+            else AppState.cl.exams.push(id);
+            renderCurrentStep();
+        }
+        function generateCLTicket() {
+            AppState.cl.ticketNumber = 'A' + String(Math.floor(100 + Math.random() * 900));
+            flowNext();
+        }
+        function setCLRating(n) { AppState.cl.rating = n; renderCurrentStep(); }
+        function finishClinic() { showToast('Obrigado pela avaliação', 'success'); goHome(); }
+        function renderQR() {
+            const q = document.getElementById('clQr');
+            if (!q) return;
+            const size = 5, dots = [];
+            for (let i = 0; i < size*size; i++) dots.push(Math.random() > 0.5);
+            q.innerHTML = dots.map(d => `<div class="qr-dot ${d ? '' : 'empty'}"></div>`).join('');
+        }
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(msg, type) {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = 'toast ' + (type || 'success');
+            t.textContent = msg;
+            c.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+
+        // ============================================================
+        // CART: BADGE + FLY + DROPDOWN
+        // ============================================================
+        function updateCartBadge() {
+            const badge = document.getElementById('cartBadge');
+            if (!badge) return;
+            const total = AppState.ff.cart.reduce((s, i) => s + i.qty, 0);
+            badge.textContent = total;
+            if (total > 0) badge.classList.add('visible');
+            else badge.classList.remove('visible');
+
+            // atualiza o dropdown se estiver aberto
+            const dd = document.getElementById('cartDropdown');
+            if (dd && dd.classList.contains('open')) renderCartDropdown();
+        }
+        function updateCartVisibility() {
+    const btn = document.getElementById('btnCart');
+    if (!btn) return;
+    const show = AppState.currentFlow === 'fastfood';
+    btn.style.display = show ? 'flex' : 'none';
+    if (!show) closeCartDropdown();
+}
+
+
+        function pulseBadge() {
+            const badge = document.getElementById('cartBadge');
+            if (!badge) return;
+            badge.classList.remove('pulse');
+            void badge.offsetWidth;
+            badge.classList.add('pulse');
+        }
+
+        function flyToCart(sourceEl, product) {
+            const cartBtn = document.getElementById('btnCart');
+            if (!sourceEl || !cartBtn) return;
+
+            const fromRect = sourceEl.getBoundingClientRect();
+            const toRect = cartBtn.getBoundingClientRect();
+
+            const fly = document.createElement('div');
+            fly.className = 'fly-item';
+
+            if (product.photo) {
+                fly.innerHTML = `<img src="${product.photo}" onerror="this.remove();this.parentElement.innerHTML='<span class=&quot;fly-mono&quot;>${product.name.charAt(0).toUpperCase()}</span>'">`;
+            } else {
+                fly.innerHTML = `<span class="fly-mono">${product.name.charAt(0).toUpperCase()}</span>`;
+            }
+
+            const startX = fromRect.left + fromRect.width / 2 - 30;
+            const startY = fromRect.top + fromRect.height / 2 - 30;
+            fly.style.left = startX + 'px';
+            fly.style.top = startY + 'px';
+            document.body.appendChild(fly);
+
+            const endX = toRect.left + toRect.width / 2 - 7;
+            const endY = toRect.top + toRect.height / 2 - 7;
+
+            // força reflow para registrar a posição inicial e animar com transição
+            void fly.offsetWidth;
+            fly.style.left = endX + 'px';
+            fly.style.top = endY + 'px';
+            fly.classList.add('flying');
+
+            setTimeout(() => {
+                pulseBadge();
+                fly.remove();
+            }, 750);
+        }
+
+        function renderCartDropdown() {
+            const body = document.getElementById('cartDropdownBody');
+            const foot = document.getElementById('cartDropdownFoot');
+            const count = document.getElementById('cartDropdownCount');
+            const total = document.getElementById('cartDropdownTotal');
+            if (!body || !foot) return;
+
+            const cart = AppState.ff.cart;
+            const qty = cart.reduce((s, i) => s + i.qty, 0);
+
+            if (count) count.textContent = qty === 1 ? '1 item' : `${qty} itens`;
+
+            if (cart.length === 0) {
+                body.innerHTML = `<div class="cart-dropdown-empty">Carrinho vazio</div>`;
+                foot.style.display = 'none';
+                return;
+            }
+
+            body.innerHTML = cart.map(item => {
+                const unit = item.price + (item.customs || []).reduce((s,id) => s + (BURGER_CUSTOMS.find(c=>c.id===id)?.price || 0), 0);
+                const customNames = (item.customs || []).map(id => BURGER_CUSTOMS.find(c => c.id === id)?.name).filter(Boolean);
+                const img = item.photo
+                    ? `<img src="${item.photo}" onerror="this.remove();this.parentElement.innerHTML='<span class=&quot;dd-mono&quot;>${item.name.charAt(0).toUpperCase()}</span>'">`
+                    : `<span class="dd-mono">${item.name.charAt(0).toUpperCase()}</span>`;
+                return `<div class="cart-dropdown-item">
+                    <div class="cart-dropdown-item-img">${img}</div>
+                    <div class="cart-dropdown-item-info">
+                        <h5>${item.name}</h5>
+                        <span>${item.qty}× ${customNames.length ? '· ' + customNames.join(', ') : ''}</span>
+                    </div>
+                    <div class="cart-dropdown-item-price">${fmtBRL(unit * item.qty)}</div>
+                </div>`;
+            }).join('');
+
+            if (total) total.textContent = fmtBRL(cartSubtotal());
+            foot.style.display = 'block';
+        }
+
+        function toggleCartDropdown(e) {
+            if (e) e.stopPropagation();
+            const dd = document.getElementById('cartDropdown');
+            if (!dd) return;
+            if (dd.classList.contains('open')) {
+                dd.classList.remove('open');
+            } else {
+                renderCartDropdown();
+                dd.classList.add('open');
+            }
+        }
+
+        function closeCartDropdown() {
+            const dd = document.getElementById('cartDropdown');
+            if (dd) dd.classList.remove('open');
+        }
+
+        function goCartFull() {
+            closeCartDropdown();
+            // garante que estamos no fluxo fast food (sem resetar o carrinho)
+            if (AppState.currentFlow !== 'fastfood') {
+                AppState.currentFlow = 'fastfood';
+                updateCartVisibility();
+                showScreen('screenFastFood');
+            }
+            if (!AppState.ff.category) {
+                AppState.currentStep = 0;
+            } else {
+                AppState.currentStep = 3;
+            }
+            renderCurrentStep();
+            resetInactivityTimer();
+        }
+
+        // ============================================================
+        // ATTRACTOR / INACTIVITY
+        // ============================================================
+        function showAttractor() {
+            document.getElementById('attractorOverlay').classList.add('active');
+        }
+        function hideAttractor() {
+            document.getElementById('attractorOverlay').classList.remove('active');
+        }
+        function resetInactivityTimer() {
+            clearTimeout(AppState.inactivityTimeout);
+            clearTimeout(AppState.attractorTimeout);
+            if (AppState.currentFlow === null) {
+                AppState.attractorTimeout = setTimeout(() => showAttractor(), ATTRACTOR_DELAY);
+                AppState.inactivityTimeout = setTimeout(() => location.reload(), RESET_DELAY);
+            }
+        }
+
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+        document.getElementById('attractorOverlay').addEventListener('click', () => { hideAttractor(); resetInactivityTimer(); });
+        document.getElementById('btnFullscreen').addEventListener('click', toggleFullscreen);
+        document.getElementById('btnHome').addEventListener('click', goHome);
+        document.getElementById('btnCart').addEventListener('click', toggleCartDropdown);
+        document.getElementById('cartDropdownGo').addEventListener('click', goCartFull);
+
+        // Fecha o dropdown ao clicar fora
+        document.addEventListener('click', function(e) {
+            const dd = document.getElementById('cartDropdown');
+            const btn = document.getElementById('btnCart');
+            if (!dd || !btn) return;
+            if (dd.classList.contains('open') && !dd.contains(e.target) && !btn.contains(e.target)) {
+                closeCartDropdown();
+            }
+        });
+
+        // Ícones SVG da home
+        document.getElementById('iconFood').innerHTML = svgIcon('food');
+        document.getElementById('iconCar').innerHTML = svgIcon('car');
+        document.getElementById('iconClinic').innerHTML = svgIcon('clinic');
+
+        // Inicializa o atrator
+        resetInactivityTimer();
+    </script>
+</body>
+</html>
