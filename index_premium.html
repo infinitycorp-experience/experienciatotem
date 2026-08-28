@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=2560, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Plataforma de Autoatendimento — Apresentação Executiva</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -79,14 +79,14 @@
         }
         .attractor-overlay.active{opacity:1;pointer-events:all}
         .attractor-logo-img{width:260px;height:auto;filter:drop-shadow(0 12px 40px rgba(0,0,0,0.5));}
-        .attractor-title{font-family:var(--font-display);font-size:3.75rem;font-weight:600;color:var(--text);letter-spacing:0.01em;text-align:center;}
+        .attractor-title{font-size:clamp(1.8rem, 3.2vw, 3.75rem);font-weight:600;color:var(--text);letter-spacing:0.01em;text-align:center;}
         .attractor-title em{font-style:normal;color:var(--gold-light)}
         .attractor-subtitle{font-family:var(--font-ui);font-size:1.15rem;color:var(--text-secondary);letter-spacing:0.28em;text-transform:uppercase;}
         .attractor-tap{font-size:0.9rem;color:var(--text-muted);letter-spacing:0.2em;text-transform:uppercase;margin-top:1.5rem;padding:0.9rem 2rem;border:1px solid var(--border-strong);border-radius:99px;}
         .attractor-divider{width:1px;height:64px;background:linear-gradient(180deg,transparent,var(--gold),transparent);}
 
         /* ============ APP / SCREENS ============ */
-        .app-container{max-width:2560px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+        .app-container{max-width:100%;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
         .screen{display:none;flex-direction:column;padding:2rem 3.5rem;flex:1}
         .screen.active{display:flex;animation:screenEnter 0.45s cubic-bezier(0.25,0.8,0.25,1)}
         .screen.active.exiting{animation:screenExit 0.28s cubic-bezier(0.25,0.8,0.25,1) forwards}
@@ -301,7 +301,7 @@
         .home-content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2rem;gap:3.5rem;}
         .home-heading{text-align:center;max-width:900px;}
         .home-eyebrow{font-family:var(--font-ui);font-size:0.85rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem;}
-        .home-heading h1{font-family:var(--font-display);font-size:3.4rem;font-weight:500;line-height:1.15;letter-spacing:0.01em;color:var(--text);}
+        .home-heading h1{font-size:clamp(1.7rem, 3vw, 3.4rem);font-weight:500;line-height:1.15;letter-spacing:0.01em;color:var(--text);}
         .home-heading h1 em{font-style:normal;color:var(--gold-light);}
         .home-heading p{color:var(--text-secondary);font-size:1.1rem;line-height:1.7;margin-top:1.25rem;}
         .home-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;max-width:1680px;width:100%;}
@@ -311,7 +311,7 @@
         .home-icon{display:flex;align-items:center;justify-content:center;margin-bottom:1.75rem;color:var(--gold);}
         .home-icon svg{width:56px;height:56px;}
         .home-card .idx{font-family:var(--font-ui);font-size:0.78rem;letter-spacing:0.3em;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.75rem;}
-        .home-card h2{font-family:var(--font-display);font-size:1.75rem;font-weight:500;margin-bottom:0.65rem;color:var(--text);}
+        .home-card h2{font-size:clamp(1.2rem, 1.8vw, 1.75rem);font-weight:500;margin-bottom:0.65rem;color:var(--text);}
         .home-card p{color:var(--text-secondary);font-size:0.98rem;line-height:1.6}
         .home-card .card-accent{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity var(--transition);}
         .home-card:hover .card-accent{opacity:1}
@@ -341,7 +341,7 @@
         /* ============ SECTION ============ */
         .section-head{margin-bottom:2rem;}
         .eyebrow{font-family:var(--font-ui);font-size:0.78rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:0.75rem;}
-        .section-title{font-family:var(--font-display);font-size:2.4rem;font-weight:500;letter-spacing:0.01em;color:var(--text);display:flex;align-items:center;gap:1.25rem;}
+        .section-title{font-size:clamp(1.3rem, 2vw, 2.4rem);font-weight:500;letter-spacing:0.01em;color:var(--text);display:flex;align-items:center;gap:1.25rem;}
         .section-title::before{content:'';width:38px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);}
         .section-note{color:var(--text-secondary);font-size:1rem;margin-top:0.6rem;}
 
@@ -372,7 +372,7 @@
         .product-info h3{font-family:var(--font-ui);font-size:1.15rem;font-weight:600;margin-bottom:0.4rem;letter-spacing:0.01em}
         .product-info .desc{font-size:0.9rem;color:var(--text-secondary);flex:1;line-height:1.5}
         .product-info .price-row{display:flex;align-items:center;justify-content:space-between;margin-top:1.25rem;gap:1rem}
-        .product-info .price{font-family:var(--font-display);font-size:1.45rem;font-weight:600;color:var(--gold-light);}
+        .product-info .price{font-size:clamp(1rem, 1.5vw, 1.45rem);font-weight:600;color:var(--gold-light);}
         .btn-add{padding:0.7rem 1.4rem;border-radius:var(--radius-sm);background:transparent;color:var(--gold-light);font-weight:600;font-size:0.9rem;transition:all var(--transition-fast);border:1px solid var(--gold-dark);letter-spacing:0.02em;}
         .btn-add:hover{background:rgba(201,162,75,0.12);}
         .btn-add:active{transform:scale(0.95)}
@@ -496,7 +496,28 @@
             .btn-primary,.btn-secondary{width:100%;text-align:center}
             .payment-methods{grid-template-columns:repeat(2,1fr)}
             .cart-dropdown{right:1.5rem}
-        }
+
+        /* Telas 1920x1080 (Full HD) */
+@media(max-width:1920px){
+    .screen{padding:1.5rem 2.5rem;}
+    .home-grid{grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+    .home-card{padding:2.2rem 1.8rem;}
+    .app-header{padding:0.9rem 2.5rem;}
+    .product-img{height:160px;}
+}
+
+/* Telas 1366x768 (comum em totem 19") */
+@media(max-width:1366px){
+    .screen{padding:1.25rem 1.5rem;}
+    .home-grid{grid-template-columns:repeat(3,1fr);gap:1rem;}
+    .home-card{padding:1.6rem 1.2rem;}
+    .home-icon svg{width:40px;height:40px;}
+    .app-header{padding:0.7rem 1.5rem;}
+    .product-img{height:130px;}
+    .cart-dropdown{right:1rem;}
+}
+    
+ 
     </style>
 </head>
 <body>
