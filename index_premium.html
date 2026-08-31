@@ -625,7 +625,7 @@
             </div>
             <div class="header-actions">
     <button class="btn-icon" id="btnVoltar" title="Voltar à seleção" onclick="location.href='index.html'">↩</button>
-    <button class="btn-icon" id="btnFullscreen" title="Tela cheia"><span class="fs-icon">⛶</span></button>
+    <button class="btn-icon" id="btnFullscreen" title="Tela cheia" onclick="toggleFullscreen()"><span class="fs-icon">⛶</span></button>
     <button class="btn-icon" id="btnHome" title="Início">⌂</button>
     <button class="cart-icon-btn" id="btnCart" title="Ver carrinho">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
@@ -794,16 +794,60 @@ function paymentIcon(type) {
         // ============================================================
         // FULLSCREEN
         // ============================================================
-        function toggleFullscreen() {
-            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                const el = document.documentElement;
-                if (el.requestFullscreen) el.requestFullscreen();
-                else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-            } else {
-                if (document.exitFullscreen) document.exitFullscreen();
-                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        // ===================== TELA CHEIA PERSISTENTE =====================
+const FS_KEY = 'totem-fullscreen';
+
+function isFullscreenOn() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement);
+}
+function enterFullscreen() {
+    const el = document.documentElement;
+    if (el.requestFullscreen) return el.requestFullscreen();
+    if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+    return Promise.reject(new Error('Fullscreen não suportado'));
+}
+function exitFullscreen() {
+    if (document.exitFullscreen) return document.exitFullscreen();
+    if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+    return Promise.reject(new Error('Fullscreen não suportado'));
+}
+
+function toggleFullscreen() {
+    if (isFullscreenOn()) {
+        localStorage.setItem(FS_KEY, 'off');
+        exitFullscreen().catch(() => {});
+    } else {
+        localStorage.setItem(FS_KEY, 'on');
+        enterFullscreen().catch(() => {});
+    }
+}
+
+// Reentra em tela cheia ao carregar a página (mantém entre index -> modos -> index).
+// Por padrão já entra em tela cheia; só fica em janela se o usuário desligou pelo botão.
+(function autoFullscreenOnLoad() {
+    if (localStorage.getItem(FS_KEY) === 'off') return;
+    const tryEnter = () => enterFullscreen().catch(() => {});
+    tryEnter();
+
+    // Fallback: alguns navegadores bloqueiam fullscreen sem "gesto" do usuário.
+    // Nesse caso, o primeiro toque/clique da página ativa a tela cheia.
+    if (!isFullscreenOn()) {
+        const onGesture = () => {
+            tryEnter();
+            if (isFullscreenOn()) {
+                ['pointerdown', 'touchstart', 'click'].forEach(e => document.removeEventListener(e, onGesture));
             }
-        }
+        };
+        ['pointerdown', 'touchstart', 'click'].forEach(e => document.addEventListener(e, onGesture));
+    }
+})();
+function syncFsIcon() {
+    const icon = document.getElementById('btnFullscreen')?.querySelector('.fs-icon');
+    if (icon) icon.textContent = isFullscreenOn() ? '🗗' : '⛶';
+}
+document.addEventListener('fullscreenchange', syncFsIcon);
+document.addEventListener('webkitfullscreenchange', syncFsIcon);
+
 
         // ============================================================
         // NAVIGATION
