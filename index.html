@@ -47,9 +47,51 @@
             animation: neon-pulse 3s infinite ease-in-out;
             display: inline-block;
         }
+
+        /* ============ TOTEM VERTICAL 1080x1920 (retrato) ============ */
+        @media (orientation: portrait) and (min-width: 900px) {
+            .experience-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem !important;
+                max-width: 780px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .experience-card {
+                padding: 2.25rem 2.5rem !important;
+            }
+            .experience-card h3 {
+                font-size: 1.45rem !important;
+            }
+            .card-sub {
+                font-size: 0.9rem !important;
+            }
+            .card-desc {
+                font-size: 1rem !important;
+            }
+            .experience-card li {
+                font-size: 0.95rem !important;
+            }
+            .card-cta {
+                font-size: 1.05rem !important;
+                padding-top: 1rem !important;
+                padding-bottom: 1rem !important;
+            }
+            .card-icon {
+                height: 3.5rem !important;
+                width: 3.5rem !important;
+                font-size: 1.6rem !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-premium text-slate-100 h-[100dvh] flex flex-col justify-between p-4 md:p-6 select-none overflow-hidden">
+
+    <!-- ===================== BOTÃO TELA CHEIA ===================== -->
+    <button onclick="toggleFullscreen()" title="Tela cheia"
+        class="fixed top-3 right-3 z-50 h-11 w-11 rounded-xl bg-slate-900/60 border border-slate-700/60 backdrop-blur-sm text-slate-300 hover:text-white hover:border-[#0096d6] transition-all flex items-center justify-center">
+        <i id="fullscreenIcon" class="fa-solid fa-expand"></i>
+    </button>
 
     <!-- ===================== CABEÇALHO (IDÊNTICO AO EVENTO) ===================== -->
     <header class="text-center py-2 flex flex-col items-center gap-1 shrink-0">
@@ -81,21 +123,21 @@
 
     <!-- ===================== SELEÇÃO DE EXPERIÊNCIA ===================== -->
     <main class="flex-grow flex items-center justify-center max-w-4xl mx-auto w-full py-2 overflow-hidden">
-        <div class="w-full space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-5">
+        <div class="experience-grid w-full space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-5">
 
             <!-- CARD 1: MODO PREMIUM -->
-            <div onclick="location.href='index_premium.html'" class="cursor-pointer bg-slate-900/40 border border-[#0096d6]/40 hover:border-[#0096d6] rounded-2xl p-5 md:p-6 transition-all active:scale-[0.98] shadow-lg flex flex-col gap-3 group">
+            <div onclick="location.href='index_premium.html'" class="experience-card cursor-pointer bg-slate-900/40 border border-[#0096d6]/40 hover:border-[#0096d6] rounded-2xl p-5 md:p-6 transition-all active:scale-[0.98] shadow-lg flex flex-col gap-3 group">
                 <div class="flex items-center gap-3">
-                    <div class="h-12 w-12 shrink-0 bg-[#0096d6]/10 border border-[#0096d6]/30 rounded-xl flex items-center justify-center text-[#0096d6] text-xl group-hover:bg-[#0096d6] group-hover:text-white transition-all">
+                    <div class="card-icon h-12 w-12 shrink-0 bg-[#0096d6]/10 border border-[#0096d6]/30 rounded-xl flex items-center justify-center text-[#0096d6] text-xl group-hover:bg-[#0096d6] group-hover:text-white transition-all">
                         <i class="fa-solid fa-gem"></i>
                     </div>
                     <div>
                         <h3 class="text-base font-extrabold text-white leading-snug">Modo Premium</h3>
-                        <p class="text-[11px] text-slate-400 leading-snug mt-0.5">Apresentação Executiva</p>
+                        <p class="card-sub text-[11px] text-slate-400 leading-snug mt-0.5">Apresentação Executiva</p>
                     </div>
                 </div>
 
-                <p class="text-xs text-slate-400 leading-relaxed">
+                <p class="card-desc text-xs text-slate-400 leading-relaxed">
                     Interface sóbria e refinada, em grafite e dourado, para demonstrar a plataforma à diretoria.
                 </p>
 
@@ -105,24 +147,24 @@
                     <li class="flex items-center gap-2"><i class="fa-solid fa-check text-[#0096d6] text-[10px]"></i> Veículo com fotos e cores</li>
                 </ul>
 
-                <div class="w-full bg-gradient-to-r from-[#0096d6] to-[#007cb3] py-3 rounded-xl text-sm font-bold text-white text-center transition-all shadow-lg shadow-sky-900/20 group-hover:brightness-110 mt-1">
+                <div class="card-cta w-full bg-gradient-to-r from-[#0096d6] to-[#007cb3] py-3 rounded-xl text-sm font-bold text-white text-center transition-all shadow-lg shadow-sky-900/20 group-hover:brightness-110 mt-1">
                     Entrar <i class="fa-solid fa-arrow-right ml-1"></i>
                 </div>
             </div>
 
             <!-- CARD 2: MODO GAMIFICADO -->
-            <div onclick="location.href='Gamificado.html'" class="cursor-pointer bg-slate-900/40 border border-[#f06c20]/40 hover:border-[#f06c20] rounded-2xl p-5 md:p-6 transition-all active:scale-[0.98] shadow-lg flex flex-col gap-3 group">
+            <div onclick="location.href='Gamificado.html'" class="experience-card cursor-pointer bg-slate-900/40 border border-[#f06c20]/40 hover:border-[#f06c20] rounded-2xl p-5 md:p-6 transition-all active:scale-[0.98] shadow-lg flex flex-col gap-3 group">
                 <div class="flex items-center gap-3">
-                    <div class="h-12 w-12 shrink-0 bg-[#f06c20]/10 border border-[#f06c20]/30 rounded-xl flex items-center justify-center text-[#f06c20] text-xl group-hover:bg-[#f06c20] group-hover:text-white transition-all">
+                    <div class="card-icon h-12 w-12 shrink-0 bg-[#f06c20]/10 border border-[#f06c20]/30 rounded-xl flex items-center justify-center text-[#f06c20] text-xl group-hover:bg-[#f06c20] group-hover:text-white transition-all">
                         <i class="fa-solid fa-gamepad"></i>
                     </div>
                     <div>
                         <h3 class="text-base font-extrabold text-white leading-snug">Modo Gamificado</h3>
-                        <p class="text-[11px] text-slate-400 leading-snug mt-0.5">Totem Interativo</p>
+                        <p class="card-sub text-[11px] text-slate-400 leading-snug mt-0.5">Totem Interativo</p>
                     </div>
                 </div>
 
-                <p class="text-xs text-slate-400 leading-relaxed">
+                <p class="card-desc text-xs text-slate-400 leading-relaxed">
                     Experiência leve e lúdica, com cores vivas e animações, ideal para pontos de autoatendimento.
                 </p>
 
@@ -132,7 +174,7 @@
                     <li class="flex items-center gap-2"><i class="fa-solid fa-check text-[#f06c20] text-[10px]"></i> Carro em SVG com gradientes</li>
                 </ul>
 
-                <div class="w-full bg-gradient-to-r from-[#f06c20] to-[#d6550f] py-3 rounded-xl text-sm font-bold text-white text-center transition-all shadow-lg shadow-orange-900/20 group-hover:brightness-110 mt-1">
+                <div class="card-cta w-full bg-gradient-to-r from-[#f06c20] to-[#d6550f] py-3 rounded-xl text-sm font-bold text-white text-center transition-all shadow-lg shadow-orange-900/20 group-hover:brightness-110 mt-1">
                     Entrar <i class="fa-solid fa-arrow-right ml-1"></i>
                 </div>
             </div>
@@ -143,6 +185,27 @@
     <footer class="text-center py-2 text-[10px] text-slate-600 tracking-wider shrink-0 border-t border-slate-800/20">
         INFINITYCORP &copy; 2026 • SELECIONE A EXPERIÊNCIA • USE O BOTÃO <span class="text-slate-400">↩</span> PARA VOLTAR AQUI
     </footer>
+
+    <!-- ===================== TELA CHEIA ===================== -->
+    <script>
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        function syncFullscreenIcon() {
+            const icon = document.getElementById('fullscreenIcon');
+            if (icon) {
+                icon.className = document.fullscreenElement
+                    ? 'fa-solid fa-compress'
+                    : 'fa-solid fa-expand';
+            }
+        }
+        document.addEventListener('fullscreenchange', syncFullscreenIcon);
+        document.addEventListener('webkitfullscreenchange', syncFullscreenIcon);
+    </script>
 
 </body>
 </html>
