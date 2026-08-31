@@ -488,36 +488,78 @@
         ::-webkit-scrollbar-thumb{background:var(--surface-elev);border-radius:99px;border:2px solid var(--bg)}
         ::-webkit-scrollbar-thumb:hover{background:var(--border-strong)}
 
-        @media(max-width:1400px){
-            .screen{padding:1.5rem}
-            .home-grid{grid-template-columns:1fr}
-            .cards-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
-            .flow-footer{flex-direction:column}
-            .btn-primary,.btn-secondary{width:100%;text-align:center}
-            .payment-methods{grid-template-columns:repeat(2,1fr)}
-            .cart-dropdown{right:1.5rem}
-
-        /* Telas 1920x1080 (Full HD) */
-@media(max-width:1920px){
+       /* ============ RESPONSIVIDADE ============ */
+/* 1920x1080 — Full HD */
+@media (max-width: 1920px) {
     .screen{padding:1.5rem 2.5rem;}
-    .home-grid{grid-template-columns:repeat(3,1fr);gap:1.5rem;}
-    .home-card{padding:2.2rem 1.8rem;}
-    .app-header{padding:0.9rem 2.5rem;}
-    .product-img{height:160px;}
+    .app-header{padding:0.85rem 2.5rem;}
+    .home-content{padding:2rem 1.5rem;gap:2rem;}
+    .home-grid{grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1500px;}
+    .home-card{padding:2rem 1.6rem;}
+    .home-icon svg{width:48px;height:48px;}
+    .product-img{height:150px;}
+    .card{padding:1.75rem 1.25rem;}
+    .cart-dropdown{right:2rem;}
 }
 
-/* Telas 1366x768 (comum em totem 19") */
-@media(max-width:1366px){
-    .screen{padding:1.25rem 1.5rem;}
-    .home-grid{grid-template-columns:repeat(3,1fr);gap:1rem;}
-    .home-card{padding:1.6rem 1.2rem;}
-    .home-icon svg{width:40px;height:40px;}
+/* 1366x768 — Totem 19" paisagem */
+@media (max-width: 1400px) {
+    .screen{padding:1rem 1.5rem;}
     .app-header{padding:0.7rem 1.5rem;}
-    .product-img{height:130px;}
-    .cart-dropdown{right:1rem;}
+    .home-content{padding:1.5rem 1rem;gap:1.25rem;}
+    .home-heading h1{font-size:clamp(1.5rem,2.8vw,2.6rem);}
+    .home-heading p{font-size:0.95rem;margin-top:0.75rem;}
+    .home-grid{grid-template-columns:repeat(3,1fr);gap:1rem;max-width:1300px;}
+    .home-card{padding:1.4rem 1.1rem;}
+    .home-icon{margin-bottom:0.9rem;}
+    .home-icon svg{width:38px;height:38px;}
+    .home-card h2{font-size:1.35rem;}
+    .home-card p{font-size:0.85rem;}
+    .cards-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem;}
+    .card{padding:1.4rem 1rem;}
+    .mono{width:52px;height:52px;font-size:1.1rem;margin-bottom:0.75rem;}
+    .product-img{height:120px;}
+    .section-title{font-size:1.6rem;}
+    .flow-header{padding:1rem 0;}
+    .flow-footer{padding:1rem 0;}
+    .btn-primary{padding:0.8rem 1.8rem;font-size:0.9rem;}
+    .btn-secondary{padding:0.75rem 1.4rem;font-size:0.9rem;}
+    .cart-dropdown{right:1rem;width:340px;}
+    .ticket-number{font-size:2.8rem;}
+    .star-rating{font-size:2rem;}
 }
-    
- 
+
+/* 1280x1024 — Totem 19" 4:3 */
+@media (max-width: 1300px) {
+    .home-grid{grid-template-columns:repeat(3,1fr);gap:0.9rem;}
+    .home-card{padding:1.2rem 0.9rem;}
+    .product-img{height:105px;}
+}
+
+/* Telas baixas (768px de altura) — compacta vertical */
+@media (max-height: 820px) {
+    .home-content{gap:1rem;padding:1.25rem 1.5rem;}
+    .home-heading h1{font-size:clamp(1.4rem,2.5vw,2.2rem);}
+    .home-heading p{font-size:0.9rem;margin-top:0.5rem;}
+    .home-card{padding:1.1rem 1rem;}
+    .home-icon{margin-bottom:0.7rem;}
+    .flow-header{padding:0.6rem 0;}
+    .flow-footer{padding:0.75rem 0;}
+}
+
+/* ============ ORIENTAÇÃO RETRATO ============ */
+@media (orientation: portrait) {
+    .home-grid{grid-template-columns:1fr;max-width:680px;}
+    .home-card{padding:2rem 1.5rem;}
+    .home-card p{font-size:1rem;}
+    .home-icon svg{width:48px;height:48px;}
+    .cards-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
+    .payment-methods{grid-template-columns:repeat(2,1fr);}
+    .flow-footer{flex-direction:column;align-items:stretch;}
+    .btn-primary,.btn-secondary{width:100%;text-align:center;}
+    .cart-dropdown{right:1rem;width:min(380px, calc(100vw - 2rem));}
+}
+
     </style>
 </head>
 <body>
