@@ -549,6 +549,59 @@
         ::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:99px}
         ::-webkit-scrollbar-thumb:hover{background:var(--gray-400)}
 
+        /* ============ TOTEM VERTICAL 1080x1920 (retrato) ============ */
+@media (orientation: portrait) and (min-width: 900px) {
+    .app-header { padding: 1.25rem 2rem; }
+    .header-logo { font-size: 1.8rem; }
+    .btn-icon { width: 58px; height: 58px; font-size: 1.5rem; }
+    .btn-icon .fs-icon { font-size: 1.4rem; }
+
+    /* HOME: 3 cards empilhados, maiores e tocáveis */
+    .home-content { padding: 3rem 2rem; }
+    .home-grid { grid-template-columns: 1fr; gap: 2.5rem; max-width: 700px; }
+    .home-card { padding: 3.5rem 2.5rem; border-radius: 2rem; }
+    .home-card-icon { font-size: 6rem; margin-bottom: 1.75rem; }
+    .home-card h2 { font-size: 2.25rem; }
+    .home-card p { font-size: 1.2rem; }
+
+    /* Fluxos internos (Fast Food, Veículo, Clínica) */
+    .screen { padding: 1.5rem 2rem; }
+    .flow-header { padding: 2rem 0; }
+    .btn-back { padding: 1rem 1.75rem; font-size: 1.1rem; }
+    .btn-primary { padding: 1.25rem 3rem; font-size: 1.2rem; }
+    .btn-secondary { padding: 1rem 2rem; font-size: 1.05rem; }
+    .breadcrumbs { font-size: 1rem; }
+
+    .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .card { padding: 2.25rem; }
+    .card h3 { font-size: 1.4rem; }
+    .card p { font-size: 1rem; }
+    .card-icon { font-size: 4rem; }
+    .card-price { font-size: 1.5rem; }
+
+    .product-img { height: 200px; }
+    .product-info h3 { font-size: 1.3rem; }
+    .product-info .desc { font-size: 1rem; }
+    .product-info .price { font-size: 1.6rem; }
+    .btn-add { padding: 0.85rem 1.5rem; font-size: 1.05rem; }
+
+    .custom-option { padding: 1.25rem 1.5rem; }
+    .custom-option .opt-info h4 { font-size: 1.1rem; }
+    .custom-option .opt-price { font-size: 1.1rem; }
+
+    .payment-methods { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .payment-method { padding: 2.5rem 1.75rem; font-size: 3rem; }
+    .payment-method span { font-size: 1.05rem; }
+
+    .vehicle-svg-container svg { width: 280px; }
+    .color-swatch { width: 68px; height: 68px; }
+
+    .cart-item { padding: 1.5rem; }
+    .qty-btn { width: 40px; height: 40px; }
+    .flow-footer { padding: 1.75rem 0; }
+}
+
+
         @media(max-width:768px){
             .screen{padding:1rem}
             .home-grid{grid-template-columns:1fr}
@@ -587,7 +640,7 @@
             <div class="header-logo">⚡ Amostras de Aplicação Totem 🚀</div>
             <div class="header-actions">
     <button class="btn-icon ripple" id="btnVoltar" title="Voltar à seleção" onclick="location.href='index.html'">↩</button>
-    <button class="btn-icon ripple" id="btnFullscreen" title="Tela cheia"><span class="fs-icon">⛶</span></button>
+    <button class="btn-icon ripple" id="btnFullscreen" title="Tela cheia" onclick="toggleFullscreen()"><span class="fs-icon">⛶</span></button>
     <button class="btn-icon ripple" id="btnDarkMode" title="Modo escuro">🌙</button>
     <button class="btn-icon ripple" id="btnHome" title="Tela inicial">🏠</button>
 </div>
@@ -889,24 +942,23 @@
         // FULLSCREEN
         // ============================================================
         function toggleFullscreen() {
-            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                const el = document.documentElement;
-                if (el.requestFullscreen) el.requestFullscreen();
-                else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-                document.getElementById('btnFullscreen').querySelector('.fs-icon').textContent = '⛶';
-            } else {
-                if (document.exitFullscreen) document.exitFullscreen();
-                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-                document.getElementById('btnFullscreen').querySelector('.fs-icon').textContent = '⛶';
-            }
-        }
+    const icon = document.getElementById('btnFullscreen')?.querySelector('.fs-icon');
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        const el = document.documentElement;
+        if (el.requestFullscreen) el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }
+}
+function syncFsIcon() {
+    const icon = document.getElementById('btnFullscreen')?.querySelector('.fs-icon');
+    if (icon) icon.textContent = (document.fullscreenElement || document.webkitFullscreenElement) ? '🗗' : '⛶';
+}
+document.addEventListener('fullscreenchange', syncFsIcon);
+document.addEventListener('webkitfullscreenchange', syncFsIcon);
 
-        document.addEventListener('fullscreenchange', () => {
-            const icon = document.getElementById('btnFullscreen')?.querySelector('.fs-icon');
-            if (icon) {
-                icon.textContent = document.fullscreenElement ? '⛶' : '⛶';
-            }
-        });
 
         // ============================================================
         // NAVIGATION
